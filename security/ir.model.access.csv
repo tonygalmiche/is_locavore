@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_is_preparation_commande,access_is_preparation_commande,model_is_preparation_commande,base.group_user,1,1,1,1
+access_is_preparation_commande_line,access_is_preparation_commande_line,model_is_preparation_commande_line,base.group_user,1,1,1,1
+access_is_preparation_commande_fournisseur,access_is_preparation_commande_fournisseur,model_is_preparation_commande_fournisseur,base.group_user,1,1,1,1
+access_is_postgres_function,access_is_postgres_function,model_is_postgres_function,,1,0,0,0
+
+
+

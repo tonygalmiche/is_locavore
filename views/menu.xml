@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+
+        <menuitem 
+            id="is_preparation_commande_main_menu"
+            sequence="20"
+            name="Préparation de commandes"
+            parent="purchase.menu_purchase_root"
+        />
+
+        <menuitem 
+            id="is_preparation_commande_menu"
+            sequence="10"
+            name="Préparation de commandes"
+            parent="is_preparation_commande_main_menu"
+            action="is_preparation_commande_action"
+        />
+
+    </data>
+</odoo>

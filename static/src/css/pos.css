@@ -1,0 +1,41 @@
+
+/*
+.pos .pos-sale-ticket {
+    width: 600px;
+    font-size: 14px;
+}
+
+.screen .centered-content{
+    right:10%; top: 64px; bottom: 0px;
+    left:10%;
+}
+
+.pos .page-break {
+    height:0mm;
+}
+
+
+@media print {
+    .pos {
+        overflow: auto !important;
+    }
+    .pos .pos-sale-ticket{
+        margin-top : 60mm  !important;
+        margin-left: 0mm   !important;
+        padding-left : 1mm  !important;
+        padding-right: 1mm   !important;
+        width      : 114mm !important;
+        border     : solid 1px black !important;
+        overflow: initial !important;
+        display: block !important;
+    }
+    .pos .pos-sale-ticket table {
+        table-layout: initial !important;
+    }
+    .pos .page-break {
+        height:60mm !important;
+    }
+}
+*/
+
+

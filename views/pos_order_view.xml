@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="is_view_pos_pos_form" model="ir.ui.view">
+        <field name="name">is_view_pos_pos_form</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_pos_form" />
+        <field name="arch" type="xml">
+            <field name="date_order" position="after">
+                <field name="is_annee"/>
+                <field name="is_mois"/>
+                <field name="is_total"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="is_view_pos_order_tree" model="ir.ui.view">
+        <field name="name">is_view_pos_order_tree</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_order_tree" />
+        <field name="arch" type="xml">
+            <tree position="replace">
+                <tree string="POS Orders" decoration-info="state == 'draft'" decoration-muted="state in ('done','cancel')" create="0">
+                    <field name="name"/>
+                    <field name="pos_reference"/>
+                    <field name="partner_id"/>
+                    <field name="date_order"/>
+                    <field name="is_annee"/>
+                    <field name="is_mois"/>
+                    <field name="is_total"     sum="Total" widget="monetary"/>
+                    <field name="amount_total" sum="Total" widget="monetary"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="state"/>
+                    <field name="session_id" />
+                </tree>
+            </tree>
+        </field>
+    </record>
+
+
+    <!-- Rapport par mois et par an -->
+    <record id="is_view_pos_order_pivot" model="ir.ui.view">
+         <field name="name">is_view_pos_order_pivot</field>
+         <field name="model">pos.order</field>
+         <field name="arch" type="xml">
+             <pivot type="pivot">
+                 <field name="is_mois"  type="row" string="Mois"/>
+                 <field name="is_annee" type="col" string="Année"/>
+                 <field name="is_total" type="measure"/>
+             </pivot>
+         </field>
+    </record>
+    <record id="is_view_pos_order_pivot_action" model="ir.actions.act_window">
+        <field name="name">Rapport par an et par mois</field>
+        <field name="res_model">pos.order</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">pivot,tree,form</field>
+        <field name="view_id" ref="is_view_pos_order_pivot"/>
+        <field name="domain">[('is_annee','>','2012')]</field>
+    </record>
+    <menuitem 
+        name="Rapport par an" 
+        id="is_view_pos_order_pivot_menu" 
+        action="is_view_pos_order_pivot_action" 
+        parent="point_of_sale.menu_point_of_sale" sequence="90" 
+    />
+
+
+   <record id="is_view_pos_order_graph" model="ir.ui.view">
+         <field name="name">is_view_pos_order_graph</field>
+         <field name="model">pos.order</field>
+         <field name="arch" type="xml">
+             <graph type="bar" stacked="True">
+                 <field name="is_mois"  type="row" string="Mois"/>
+                 <field name="is_annee" type="row" string="Année"/>
+                 <field name="is_total" type="measure"/>
+             </graph>
+         </field>
+    </record>
+    <record id="is_view_pos_order_graph_action" model="ir.actions.act_window">
+        <field name="name">Rapport par an et par mois</field>
+        <field name="res_model">pos.order</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">graph,tree,form</field>
+        <field name="view_id" ref="is_view_pos_order_graph"/>
+        <field name="domain">[('is_annee','>','2012')]</field>
+    </record>
+    <menuitem 
+        name="Graph par an" 
+        id="is_view_pos_order_graph_menu" 
+        action="is_view_pos_order_graph_action" 
+        parent="point_of_sale.menu_point_of_sale" sequence="95" 
+    />
+
+
+
+</odoo>
+
+

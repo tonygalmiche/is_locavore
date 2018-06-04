@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+
+<!-- Permet de remplacer complètement le header -->
+<template id="is_external_layout_header" name="is_external_layout_header" inherit_id="report.external_layout_header">
+    <xpath expr="//div[@class='header']" position="replace">
+    <div class="header">
+        <div class="row">
+            <div class="row">
+                <div class="col-xs-6">
+                    <img t-att-src="'/is_locavore/static/img/logo-locavore.png'" style="max-height: 100px;"/>
+                </div>
+                <div class="col-xs-6 text-right">
+                </div>
+            </div>
+        </div>
+
+    </div>
+    </xpath>
+</template>
+
+<!-- Permet de remplacer complètement le footer -->
+<template id="is_external_layout_footer" name="is_external_layout_footer" inherit_id="report.external_layout_footer">
+    <xpath expr="//div[@class='footer']" position="replace">
+    <div class="footer">
+        <div class="row" style="border-top: 1px solid black">
+            <div class="col-xs-9  text-left">
+                Epicerie Locavore des Bourroches - N°SIRET : 79 022 86 39 00015
+            </div>
+            <div class="col-xs-3 text-right" style="font-size:10pt;">
+                Page <span class="page"/> / <span class="topage"/>
+            </div>
+        </div>
+    </div>
+    </xpath>
+</template>
+
+</data>
+</openerp>

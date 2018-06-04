@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="is_product_template_form_view" model="ir.ui.view">
+        <field name="name">is_product_template_form_view</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <field name="type" position="after">
+                <field name="is_prix_achat"/>
+                <field name="is_coef_multi_propose"/>
+                <field name="is_taux_tva_achat"/>
+                <field name="is_taux_tva_vente"/>
+                <field name="is_prix_vente_propose"/>
+                <field name="is_contenance"/>
+                <field name="is_contenance_uom_id"/>
+            </field>
+            <field name="list_price" position="after">
+                <field name="is_coef_multi_calcule"/>
+            </field>
+        </field>
+    </record>
+
+
+    <record id="is_product_template_tree_view" model="ir.ui.view">
+        <field name="name">is_product_template_tree_view</field>
+        <field name="model">product.template</field>
+        <field eval="90" name="priority"/>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="lst_price"/>
+                <field name="qty_available"/>
+                <field name="uom_id" />
+                <field name="uom_po_id" />
+                <field name="pos_categ_id"/>
+                <field name="taxes_id"/>
+                <field name="is_contenance"/>
+                <field name="is_contenance_uom_id"/>
+            </tree>
+        </field>
+    </record>
+    <record id="is_product_template_search_view" model="ir.ui.view">
+        <field name="name">is_product_template_search_view</field>
+        <field name="model">product.template</field>
+        <field name="mode">primary</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="pos_categ_id"/>
+            </field>
+
+           <field name="categ_id" position="replace"/>
+
+
+        </field>
+    </record>
+
+
+    <record id="is_product_template_action" model="ir.actions.act_window">
+        <field name="name">Articles</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.template</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="context" eval="{'search_default_filter_to_availabe_pos': 1}"/>
+        <field name="domain" eval="[]"/>
+        <field name="search_view_id" eval="False"/> <!-- Force empty -->
+        <field name="view_id" eval="is_product_template_tree_view"/>
+    </record>
+    <menuitem
+        id="point_of_sale.menu_pos_products"
+        action="is_product_template_action"
+        parent="point_of_sale.menu_point_of_sale" sequence="3"/>
+
+</odoo>

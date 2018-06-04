@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+        <template id="assets" inherit_id="pos_restaurant.assets">
+          <xpath expr="//link[@href='/pos_restaurant/static/src/css/restaurant.css']" position="after">
+                <link rel="stylesheet" href="/is_locavore/static/src/css/pos.css" />
+          </xpath>
+        </template>
+
+
+</odoo>
+
+

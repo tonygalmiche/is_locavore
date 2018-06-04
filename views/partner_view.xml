@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="is_view_partner_property_form" model="ir.ui.view">
+            <field name="name">is_view_partner_property_form</field>
+            <field name="model">res.partner</field>
+            <field name="priority">2</field>
+            <field name="inherit_id" ref="account.view_partner_property_form"/>
+            <field name="groups_id" eval="[(4, ref('account.group_account_invoice'))]"/>
+            <field name="arch" type="xml">
+                <field name="category_id" position="after">
+                    <field name="is_prenom"/>
+                    <field name="is_nom"/>
+                </field>
+                <field name="lang" position="after">
+                    <field name="is_code"/>
+                    <field name="is_frequence"/>
+                </field>
+
+            </field>
+        </record>
+
+
+       <record id="is_view_partner_tree" model="ir.ui.view">
+            <field name="name">is_view_partner_tree</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <field name="phone" position="before">
+                    <field name="is_prenom"/>
+                    <field name="is_nom"/>
+                </field>
+                <field name="phone" position="after">
+                    <field name="mobile"/>
+                    <field name="fax"/>
+                </field>
+                <field name="email" position="after">
+                    <field name="city"/>
+                    <field name="is_code"/>
+                    <field name="is_frequence"/>
+                </field>
+            </field>
+        </record>
+
+
+       <record id="is_view_res_partner_filter" model="ir.ui.view">
+            <field name="name">is_view_res_partner_filter</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter" />
+            <field name="arch" type="xml">
+                <field name="user_id" position="before">
+                    <field name="is_code"/>
+                </field>
+            </field>
+        </record>
+
+
+        <record id="is_view_partner_action" model="ir.actions.act_window">
+            <field name="name">Fournisseurs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="domain">[]</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="context">{'search_default_supplier': 1,'default_customer': 0,'default_supplier': 1}</field>
+            <field name="filter" eval="True"/>
+        </record>
+
+
+        <menuitem id="purchase.menu_procurement_management_supplier_name" name="Fournisseurs"
+            parent="purchase.menu_procurement_management"
+            action="is_view_partner_action" sequence="15"
+        />
+
+
+
+
+
+    </data>
+</odoo>
