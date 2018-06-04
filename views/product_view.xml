@@ -35,9 +35,10 @@
                 <field name="uom_id" />
                 <field name="uom_po_id" />
                 <field name="pos_categ_id"/>
-                <field name="taxes_id"/>
                 <field name="is_contenance"/>
                 <field name="is_contenance_uom_id"/>
+                <field name="taxes_id"/>
+                <field name="property_account_income_id"/>
             </tree>
         </field>
     </record>
@@ -49,6 +50,8 @@
         <field name="arch" type="xml">
             <field name="name" position="after">
                 <field name="pos_categ_id"/>
+                <field name="taxes_id"/>
+                <field name="property_account_income_id"/>
             </field>
 
            <field name="categ_id" position="replace"/>
