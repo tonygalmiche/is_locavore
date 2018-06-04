@@ -35,6 +35,7 @@ class ProductTemplate(models.Model):
     is_coef_multi_calcule = fields.Float("Coef. calculé"                    , compute='_compute', store=True, readonly=True)
     is_contenance         = fields.Integer("Contenance")
     is_contenance_uom_id  = fields.Many2one('product.uom', "Unité de contenance")
+    is_id_clyo            = fields.Char("Id Clyo")
 
 
 #    def name_get(self, cr, uid, ids, context=None):

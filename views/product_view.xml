@@ -14,6 +14,7 @@
                 <field name="is_prix_vente_propose"/>
                 <field name="is_contenance"/>
                 <field name="is_contenance_uom_id"/>
+                <field name="is_id_clyo" readonly="True"/>
             </field>
             <field name="list_price" position="after">
                 <field name="is_coef_multi_calcule"/>
