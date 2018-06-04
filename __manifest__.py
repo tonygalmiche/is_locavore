@@ -37,6 +37,7 @@ InfoSaône - Epicerie Locavore des Bourroches
         'views/product_view.xml',
         'views/purchase_views.xml',
         'views/is_preparation_commande_view.xml',
+        'views/is_imprime_etiquette_view.xml',
         'views/menu.xml',
         'report/layouts.xml',
         'report/purchase_order_templates.xml',

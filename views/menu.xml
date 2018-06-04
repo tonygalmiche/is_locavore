@@ -3,19 +3,34 @@
 <odoo>
     <data>
 
+        <!-- Préparation de commandes -->
         <menuitem 
             id="is_preparation_commande_main_menu"
             sequence="20"
             name="Préparation de commandes"
             parent="purchase.menu_purchase_root"
         />
-
         <menuitem 
             id="is_preparation_commande_menu"
             sequence="10"
             name="Préparation de commandes"
             parent="is_preparation_commande_main_menu"
             action="is_preparation_commande_action"
+        />
+
+        <!-- Impression d'étiquettes -->
+        <menuitem 
+            id="is_imprime_etiquette_main_menu"
+            sequence="21"
+            name="Impression d'étiquettes"
+            parent="purchase.menu_purchase_root"
+        />
+        <menuitem 
+            id="is_imprime_etiquette_menu"
+            sequence="10"
+            name="Impression d'étiquettes"
+            parent="is_imprime_etiquette_main_menu"
+            action="is_imprime_etiquette_action"
         />
 
     </data>

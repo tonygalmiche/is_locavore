@@ -30,8 +30,8 @@
                                         name= "liste_articles_action" type="object" icon="fa-list"
                                     />
                                     <field name="partner_id"  widget="many2one_clickable"/>
-                                    <field name="montant_stock"/>
-                                    <field name="montant_cde"/>
+                                    <field name="montant_stock" sum="Total"/>
+                                    <field name="montant_cde"   sum="Total"/>
                                     <button 
                                         string="Création commande" 
                                         name= "creation_commande_action" type="object" icon="fa-plus"

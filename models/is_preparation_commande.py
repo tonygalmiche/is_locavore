@@ -116,7 +116,7 @@ class IsPreparationCommande(models.Model):
                     vente_jour=vente_total/nb_jours
                 vente_frq=0
                 if row[4] and vente_jour:
-                    vente_frq=vente_jour*frq*1.3
+                    vente_frq=vente_jour*frq*1.1
                 nb_jours_stock=999
                 if vente_jour!=0:
                     nb_jours_stock=stock/vente_jour
@@ -201,7 +201,7 @@ class IsPreparationCommandeLine(models.Model):
     pos_categ_id    = fields.Many2one('pos.category'  , "Catégorie"  , readonly=True)
     vente_total     = fields.Float("Ventes totales", digits=(12,0)   , readonly=True)
     vente_jour      = fields.Float("Ventes par jour", digits=(12,1)  , readonly=True)
-    vente_frq       = fields.Float("Ventes x Frq x 1.3", digits=(12,0), readonly=True)
+    vente_frq       = fields.Float("Ventes x Frq x 1.1", digits=(12,0), readonly=True)
     stock           = fields.Float("Stock", digits=(12,0), readonly=True)
     qt_cde          = fields.Float("Qt en Cde", digits=(12,0), readonly=True)
     qt_suggeree     = fields.Float("Qt suggérée", digits=(12,0))

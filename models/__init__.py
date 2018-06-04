@@ -5,3 +5,4 @@ import pos_order
 import res_partner
 import product
 import is_preparation_commande
+import is_imprime_etiquette
