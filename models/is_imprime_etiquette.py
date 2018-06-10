@@ -44,7 +44,7 @@ class IsImprimeEtiquetteLine(models.Model):
     contenance         = fields.Float("Contenance", digits=(12,0))
     contenance_uom_id  = fields.Many2one('product.uom', "Unité de contenance")
     prix_kg            = fields.Float("Prix Kg/L", digits=(12,2))
-    uom_id             = fields.Many2one('product.uom', "Unité")
+    uom_id             = fields.Many2one('product.uom', "Kg/L")
     largeur            = fields.Integer("Largeur désignation étiquette", default=35)
     nb_etiquettes      = fields.Integer("Nb étiquettes", default=1)
     imprime            = fields.Boolean("Imprime",default=True)
@@ -57,12 +57,19 @@ class IsImprimeEtiquetteLine(models.Model):
             res['value']={}
             product = self.env['product.product'].browse(product_id)
             prix_kg=0
-            try:
-                x=product.uom_id._compute_quantity(1,product.is_contenance_uom_id)
-            except:
-                x=False
-            if x:
-                prix_kg=product.lst_price*x/product.is_contenance
+
+            category_id=product.is_contenance_uom_id.category_id.id
+            uoms = self.env['product.uom'].search([('uom_type','=','reference'),('category_id','=',category_id)])
+            uom=False
+            for uom in uoms:
+                unite=uom.name
+                try:
+                    x=uom._compute_quantity(1,product.is_contenance_uom_id)
+                except:
+                    x=False
+                if x:
+                    prix_kg=product.lst_price*x/product.is_contenance
+
             designation=product.name
             if product.is_designation:
                 designation=product.is_designation
@@ -72,7 +79,7 @@ class IsImprimeEtiquetteLine(models.Model):
                 'contenance'       : product.is_contenance,
                 'contenance_uom_id': product.is_contenance_uom_id.id,
                 'prix_kg'          : prix_kg,
-                'uom_id'           : product.uom_id.id,
+                'uom_id'           : uom and uom.id or False,
             })
         return res
 
