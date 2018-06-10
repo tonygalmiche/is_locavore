@@ -27,6 +27,16 @@ class ProductTemplate(models.Model):
             obj.is_prix_vente_propose = is_prix_vente_propose
             obj.is_coef_multi_calcule = is_coef_multi_calcule
 
+    def _is_prix_fournisseur(self):
+        for obj in self:
+            x=0
+            for line in obj.seller_ids:
+                x=line.price
+            obj.is_prix_fournisseur=x
+            obj.is_stock_valorise=x*obj.qty_available
+
+    is_prix_fournisseur   = fields.Float("Prix fournisseur HT", compute='_is_prix_fournisseur', store=False, readonly=True)
+    is_stock_valorise     = fields.Float("Stock valorisé"     , compute='_is_prix_fournisseur', store=False, readonly=True)
     is_prix_achat         = fields.Float("Prix d'achat HT")
     is_coef_multi_propose = fields.Float("Coeficient")
     is_taux_tva_achat     = fields.Float("Taux de TVA Achat"                , compute='_compute', store=True, readonly=True)
