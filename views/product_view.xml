@@ -12,6 +12,7 @@
                 <field name="is_taux_tva_achat"/>
                 <field name="is_taux_tva_vente"/>
                 <field name="is_prix_vente_propose"/>
+                <field name="is_designation" />
                 <field name="is_contenance"/>
                 <field name="is_contenance_uom_id"/>
                 <field name="is_id_clyo" readonly="True"/>
@@ -35,6 +36,7 @@
                 <field name="uom_id" />
                 <field name="uom_po_id" />
                 <field name="pos_categ_id"/>
+                <field name="is_designation" />
                 <field name="is_contenance"/>
                 <field name="is_contenance_uom_id"/>
                 <field name="taxes_id"/>

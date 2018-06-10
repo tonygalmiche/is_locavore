@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <template id="is_imprime_etiquette_report_layout" inherit_id="web.layout" primary="True">
+        <xpath expr="//html" position="attributes">
+            <attribute name="t-att-data-report-margin-top">data_report_margin_top if data_report_margin_top else None</attribute>
+            <attribute name="t-att-data-report-header-spacing">data_report_header_spacing if data_report_header_spacing else None</attribute>
+            <attribute name="t-att-data-report-dpi">data_report_dpi if data_report_dpi else None</attribute>
+        </xpath>
+        <xpath expr="//head" position="inside">
+            <link href="/web/static/lib/bootstrap/css/bootstrap.css" rel="stylesheet"/>
+            <link href="/website/static/src/css/website.css" rel="stylesheet"/>
+            <link href="/web/static/lib/fontawesome/css/font-awesome.css" rel="stylesheet"/>
+        </xpath>
+    </template>
+    <template id="is_imprime_etiquette_report_html_container">
+        <t t-set="body_classname" t-value="'container'"/>
+        <t t-call="is_locavore.is_imprime_etiquette_report_layout">
+            <t t-raw="0"/>
+        </t>
+    </template>
+
+
+    <!-- Entête personnalisé -->
+    <template id="is_imprime_etiquette_report_external_layout_header">
+        <div class="header">
+        </div>
+    </template>
+    <!-- Pied de page personnalisé -->
+    <template id="is_imprime_etiquette_report_external_layout_footer">
+        <div class="footer">
+        </div>
+    </template>
+    <!-- Squelette de la page personnalisé -->
+    <template id="is_imprime_etiquette_report_external_layout">
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id"/>
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"/>
+        </t>
+        <t t-call="is_locavore.is_imprime_etiquette_report_external_layout_header"/>
+        <t t-raw="0"/>
+        <t t-call="is_locavore.is_imprime_etiquette_report_external_layout_footer"/>
+    </template>
+
+
+    <!-- Page -->
+    <template id="is_imprime_etiquette_report">
+        <t t-call="is_locavore.is_imprime_etiquette_report_html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="is_locavore.is_imprime_etiquette_report_external_layout">
+                    <div class="page">
+                        <style>
+                            .page {
+                                font-size:12pt;
+                            }
+                            .designation{
+                                font-size:14pt;
+                                font-weight: bold;
+                                padding:1.5mm;
+                            }
+                            .prixvente{
+                                background-color:yellow;
+                                font-size:14pt;
+                                font-weight: bold;
+                                text-align:right;
+                                padding:1.5mm;
+                            }
+                            .contenance{
+                                font-size:11pt;
+                                font-weight: bold;
+                                font-style: italic;
+                                text-align:right;
+                                padding:1.5mm;
+                            }
+                            .prixkg{
+                                font-size:9pt;
+                                font-weight: bold;
+                                font-style: italic;
+                                text-align:right;
+                                padding:1.5mm;
+                            }
+                        </style>
+                        <div class="row">
+                            <t t-foreach="o.line_ids" t-as="l">
+                                <t t-foreach="range(l.nb_etiquettes)" t-as="i">
+                                    <t t-if="l.imprime">
+                                        <div class="col-xs-6">
+                                            <table style="border: 1px solid gray;">
+                                                <tr style="height:23mm">
+                                                    <td t-att-style="'width:'+str(l.largeur)+'mm;vertical-align: middle'">
+                                                        <div class="designation" t-field="l.designation"/>
+                                                    </td>
+                                                    <td style="width:25mm">
+                                                        <div class="prixvente"><span t-field="l.prix_vente"/> €</div>
+                                                        <div class="contenance"><span t-field="l.contenance"/> <span t-field="l.contenance_uom_id"/></div>
+                                                        <t t-if="l.prix_kg">
+                                                            <div class="prixkg"><span t-field="l.prix_kg"/> € / <span t-field="l.uom_id"/></div>
+                                                        </t>
+                                                    </td>
+                                                </tr>
+                                            </table><br />
+                                        </div>
+                                    </t>
+                                </t>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>
+
+

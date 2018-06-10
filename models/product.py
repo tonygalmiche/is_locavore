@@ -33,17 +33,10 @@ class ProductTemplate(models.Model):
     is_taux_tva_vente     = fields.Float("Taux de TVA Vente"                , compute='_compute', store=True, readonly=True)
     is_prix_vente_propose = fields.Float("Prix de vente TTC calculé"        , compute='_compute', store=True, readonly=True)
     is_coef_multi_calcule = fields.Float("Coef. calculé"                    , compute='_compute', store=True, readonly=True)
+    is_designation        = fields.Char("Désignation étiquette")
     is_contenance         = fields.Integer("Contenance")
     is_contenance_uom_id  = fields.Many2one('product.uom', "Unité de contenance")
     is_id_clyo            = fields.Char("Id Clyo")
-
-
-#    def name_get(self, cr, uid, ids, context=None):
-#        res = []
-#        for product in self.browse(cr, uid, ids, context=context):
-#            name=product.name
-#            res.append((product.id,name))
-#        return res
 
 
     @api.multi
@@ -52,7 +45,6 @@ class ProductTemplate(models.Model):
         for product in self.sudo():
             res.append((product.id,product.name))
         return res
-
 
 
 class ProductProduct(models.Model):

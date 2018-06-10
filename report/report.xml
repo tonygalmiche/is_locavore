@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+
         <report 
             id="is_preparation_commande_reports"
             model="is.preparation.commande"
@@ -12,5 +13,18 @@
         <record id="is_preparation_commande_reports" model="ir.actions.report.xml">
             <field name="paperformat_id" ref="is_locavore.is_preparation_commande_paperformat"/>
         </record>
+
+        <report 
+            id="is_imprime_etiquette_reports"
+            model="is.imprime.etiquette"
+            string="Etiquettes"
+            report_type="qweb-pdf"
+            name="is_locavore.is_imprime_etiquette_report"
+            file="is_locavore.is_imprime_etiquette_report"
+        />
+        <record id="is_imprime_etiquette_reports" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="is_locavore.is_imprime_etiquette_paperformat"/>
+        </record>
+
     </data>
 </odoo>

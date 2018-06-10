@@ -28,6 +28,7 @@
                                     <field name="contenance_uom_id"/>
                                     <field name="prix_kg"/>
                                     <field name="uom_id"/>
+                                    <field name="largeur"/>
                                     <field name="nb_etiquettes"/>
                                     <field name="imprime"/>
                                 </tree>
