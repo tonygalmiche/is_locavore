@@ -33,8 +33,8 @@
                 <field name="name"/>
                 <field name="lst_price" string="Prix de vente TTC"/>
                 <field name="is_prix_fournisseur"/>
-                <field name="qty_available"/>
-                <field name="is_stock_valorise" />
+                <field name="qty_available"     sum="Total"/>
+                <field name="is_stock_valorise" sum="Total"/>
                 <field name="uom_id" />
                 <field name="uom_po_id" />
                 <field name="pos_categ_id"/>
