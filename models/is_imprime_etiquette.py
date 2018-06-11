@@ -70,9 +70,9 @@ class IsImprimeEtiquetteLine(models.Model):
                 if x:
                     prix_kg=product.lst_price*x/product.is_contenance
 
-            designation=product.name
+            designation=product.name.upper()
             if product.is_designation:
-                designation=product.is_designation
+                designation=product.is_designation.upper()
             res['value'].update({
                 'designation'      : designation,
                 'prix_vente'       : product.lst_price,
