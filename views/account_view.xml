@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+
+    <record id="is_account_move_line_pivot" model="ir.ui.view">
+        <field name="name">is_account_move_line_pivot</field>
+        <field name="model">account.move.line</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="account_id" type="row"/>
+                <field name="date"       type="col" interval="day"/>
+                <field name="balance"    type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+
+    <record id="is_view_account_move_line_filter" model="ir.ui.view">
+        <field name="name">is_view_account_move_line_filter</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="account.view_account_move_line_filter" />
+        <field name="arch" type="xml">
+            <field name="date" position="after">
+                <filter string="Depuis 15 jours" name="15jours" domain="[('date','>=',(context_today()+datetime.timedelta(days=-15)).strftime('%Y-%m-%d'))]"/>
+                <filter string="Depuis 35 jours" name="35jours" domain="[('date','>=',(context_today()+datetime.timedelta(days=-35)).strftime('%Y-%m-%d'))]"/>
+            </field>
+            <xpath expr="//filter[1]" position="before">
+                <filter name="group_by_account" string="Compte"  context="{'group_by':'account_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="is_account_move_line_action" model="ir.actions.act_window">
+        <field name="name">Ecritures comptables</field>
+        <field name="res_model">account.move.line</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">pivot,tree,form</field>
+        <field name="view_id" ref="is_account_move_line_pivot"/>
+        <field name="context">{'search_default_15jours':1}</field>
+    </record>
+</odoo>
+

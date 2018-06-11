@@ -3,6 +3,16 @@
 <odoo>
     <data>
 
+        <!-- Ecritures comptables -->
+        <menuitem 
+            id="is_account_move_line_menu"
+            sequence="20"
+            name="Ecritures comptables"
+            parent="point_of_sale.menu_point_rep"
+            action="is_account_move_line_action"
+        />
+
+
         <!-- Préparation de commandes -->
         <menuitem 
             id="is_preparation_commande_main_menu"

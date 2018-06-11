@@ -16,15 +16,5 @@
         </field>
     </record>
 
-    <record id="is_view_account_move_line_filter" model="ir.ui.view">
-        <field name="name">is_view_account_move_line_filter</field>
-        <field name="model">account.move.line</field>
-        <field name="inherit_id" ref="account.view_account_move_line_filter" />
-        <field name="arch" type="xml">
-            <xpath expr="//filter[1]" position="before">
-                <filter name="group_by_account" string="Compte"  context="{'group_by':'account_id'}"/>
-            </xpath>
-        </field>
-    </record>
 
 </odoo>
