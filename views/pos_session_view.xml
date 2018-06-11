@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="is_view_pos_session_form" model="ir.ui.view">
+        <field name="name">is_view_pos_session_form</field>
+        <field name="model">pos.session</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_session_form" />
+        <field name="arch" type="xml">
+            <button name="action_stock_picking" position="after">
+                <button 
+                    string="Ecritures comptables"
+                    name="action_ecriture_comptables" type="object" 
+                    class="oe_inline oe_stat_button" icon="fa-navicon"
+                />
+            </button>
+        </field>
+    </record>
+
+    <record id="is_view_account_move_line_filter" model="ir.ui.view">
+        <field name="name">is_view_account_move_line_filter</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="account.view_account_move_line_filter" />
+        <field name="arch" type="xml">
+            <xpath expr="//filter[1]" position="before">
+                <filter name="group_by_account" string="Compte"  context="{'group_by':'account_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

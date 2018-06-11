@@ -2,6 +2,7 @@
 
 import is_postgres_function
 import pos_order
+import pos_session
 import res_partner
 import product
 import purchase
