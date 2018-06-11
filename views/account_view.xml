@@ -6,7 +6,7 @@
         <field name="name">is_account_move_line_pivot</field>
         <field name="model">account.move.line</field>
         <field name="arch" type="xml">
-            <pivot>
+            <pivot string="Ecritures comptables">
                 <field name="account_id" type="row"/>
                 <field name="date"       type="col" interval="day"/>
                 <field name="balance"    type="measure"/>
