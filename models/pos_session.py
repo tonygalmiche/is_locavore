@@ -31,3 +31,12 @@ class PosSession(models.Model):
                 'context': {'search_default_group_by_account':1},
             }
 
+
+    #TODO : Cela permet de résoudre le bug de lenter avec beaucoup de commandes
+    @api.multi
+    def _compute_picking_count(self):
+        for pos in self:
+            #pickings = pos.order_ids.mapped('picking_id').filtered(lambda x: x.state != 'done')
+            #pos.picking_count = len(pickings.ids)
+            pos.picking_count=0
+
