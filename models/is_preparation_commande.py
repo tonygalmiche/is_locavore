@@ -39,17 +39,23 @@ class IsPreparationCommande(models.Model):
             obj.line_ids.unlink()
             obj.fournisseur_ids.unlink()
             sql="""
+                select pol.product_id,sum(pol.qty)
+                from pos_order_line pol inner join pos_order po on pol.order_id=po.id
+                where 
+                    po.date_order>='"""+str(obj.date_debut)+""" 00:00:00' and
+                    po.date_order<='"""+str(obj.date_fin)+""" 23:59:59' 
+                group by pol.product_id;
+            """
+            cr.execute(sql)
+            result = cr.fetchall()
+            orders={}
+            for row in result:
+                orders[row[0]]=row[1]
+            sql="""
                 select 
                     pp.id,
                     pt.pos_categ_id,
-                    (
-                        select sum(qty)
-                        from pos_order_line pol inner join pos_order po on pol.order_id=po.id
-                        where 
-                            pol.product_id=pp.id and 
-                            po.date_order>='"""+str(obj.date_debut)+""" 00:00:00' and
-                            po.date_order<='"""+str(obj.date_fin)+""" 23:59:59' 
-                    ) ventes_totales,
+                    0 ventes_totales,
                     (
                         select rp.id
                         from product_supplierinfo ps inner join res_partner rp on ps.name=rp.id
@@ -85,9 +91,6 @@ class IsPreparationCommande(models.Model):
                 from product_product pp inner join product_template pt on pp.product_tmpl_id=pt.id 
                 where pt.pos_categ_id is not null
             """
-
-            
-
             if obj.designation:
                 sql=sql+" and pt.name ilike '"+obj.designation+"%' "
             sql=sql+" order by pt.name limit 50000"
@@ -99,20 +102,21 @@ class IsPreparationCommande(models.Model):
             nb_jours=delta.days
             fournisseurs={}
             for row in result:
-
                 coef=row[9]
-
+                product_id=row[0]
+                qt_cde=0
+                if product_id in orders:
+                    qt_cde=orders[product_id]
                 fournisseur = row[3]
                 frq         = row[4] or 0
-                qt_cde      = row[5] or 0
                 prix_achat  = row[6] or 0
                 stock=0
                 if row[7]:
                     stock = row[7]/coef
                 vente_total=0
                 vente_jour=0
-                if row[2]:
-                    vente_total=row[2]/coef
+                if qt_cde:
+                    vente_total=qt_cde/coef
                     vente_jour=vente_total/nb_jours
                 vente_frq=0
                 if row[4] and vente_jour:
@@ -125,9 +129,6 @@ class IsPreparationCommande(models.Model):
                 qt_suggeree=round(vente_frq-stock-qt_cde)
                 if qt_suggeree<0:
                     qt_suggeree=0
-
-
-                print nb_jours,qt_suggeree
 
                 montant_stock=stock*prix_achat
                 montant_cde=qt_suggeree*prix_achat
@@ -242,15 +243,12 @@ class IsPreparationCommandeFournisseur(models.Model):
     @api.multi
     def creation_commande_action(self):
         for obj in self:
-            print obj
-
             partner=obj.partner_id
             vals={
                 'partner_id'      : partner.id,
                 'fiscal_position_id' : partner.property_account_position_id.id,
             }
             order=self.env['purchase.order'].create(vals)
-            print order
             if order:
                 order_line_obj = self.env['purchase.order.line']
 
@@ -264,9 +262,6 @@ class IsPreparationCommandeFournisseur(models.Model):
                     taxe_ids  = []
                     for tax in line.product_id.supplier_taxes_id:
                         taxe_ids.append(tax.id)
-
-                    print taxe_ids
-
                     vals={
                         'order_id'    : order.id,
                         'product_id'  : line.product_id.id,
@@ -278,9 +273,6 @@ class IsPreparationCommandeFournisseur(models.Model):
                         'taxes_id'    : [(6,0,taxe_ids)],
                     }
                     line=order_line_obj.create(vals)
-                    print line,vals
-
-
                 obj.order_id=order.id
 
 
