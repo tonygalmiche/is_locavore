@@ -262,14 +262,17 @@ class IsPreparationCommandeFournisseur(models.Model):
                     taxe_ids  = []
                     for tax in line.product_id.supplier_taxes_id:
                         taxe_ids.append(tax.id)
+                    name = line.product_id.name
+                    if line.product_id.description_purchase:
+                        name = line.product_id.description_purchase
                     vals={
                         'order_id'    : order.id,
                         'product_id'  : line.product_id.id,
-                        'name'        : line.product_id.name,
-                        'product_uom' : line.product_id.uom_id.id ,
+                        'name'        : name,
+                        'product_uom' : line.uom_po_id.id ,
                         'price_unit'  : line.prix_achat,
                         'product_qty' : line.qt_suggeree,
-                        'date_planned': '2018-03-03',
+                        'date_planned': '2018-01-01',
                         'taxes_id'    : [(6,0,taxe_ids)],
                     }
                     line=order_line_obj.create(vals)
