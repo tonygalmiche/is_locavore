@@ -102,24 +102,29 @@ class IsPreparationCommande(models.Model):
             nb_jours=delta.days
             fournisseurs={}
             for row in result:
-                coef=row[9]
-                product_id=row[0]
-                qt_cde=0
+
+                product_id   = row[0]
+                pos_categ_id = row[1]
+                fournisseur  = row[3]
+                frq          = row[4] or 0
+                qt_cde       = row[5] or 0
+                prix_achat   = row[6] or 0
+                stock        = row[7] or 0
+                uom_po_id    = row[8]
+                coef         = row[9]
+                qt_vendue=0
                 if product_id in orders:
-                    qt_cde=orders[product_id]
-                fournisseur = row[3]
-                frq         = row[4] or 0
-                prix_achat  = row[6] or 0
-                stock=0
-                if row[7]:
-                    stock = row[7]/coef
+                    qt_vendue=orders[product_id]
+                #stock=0
+                if stock:
+                    stock = stock/coef
                 vente_total=0
                 vente_jour=0
-                if qt_cde:
-                    vente_total=qt_cde/coef
+                if qt_vendue:
+                    vente_total=qt_vendue/coef
                     vente_jour=vente_total/nb_jours
                 vente_frq=0
-                if row[4] and vente_jour:
+                if frq and vente_jour:
                     vente_frq=vente_jour*frq*1.1
                 nb_jours_stock=999
                 if vente_jour!=0:
@@ -138,9 +143,9 @@ class IsPreparationCommande(models.Model):
                 fournisseurs[fournisseur][1]=fournisseurs[fournisseur][1]+montant_cde
                 vals={
                     'preparation_id' : obj.id,
-                    'product_id'     : row[0],
-                    'uom_po_id'      : row[8],
-                    'pos_categ_id'   : row[1],
+                    'product_id'     : product_id,
+                    'uom_po_id'      : uom_po_id,
+                    'pos_categ_id'   : pos_categ_id,
                     'vente_total'    : vente_total,
                     'vente_jour'     : vente_jour,
                     'vente_frq'      : vente_frq,
