@@ -77,12 +77,12 @@
 
                         <style>
                             .page {
-                                font-size:12pt;
+                                font-size:11pt;
                             }
                             .page h1{
-                                font-size:15pt;
+                                font-size:14pt;
                                 font-weight: bold;
-                                text-align:center;
+                                text-align:left;
                                 padding:0mm;
                                 margin:0mm;
                                 margin-top:4mm;
@@ -103,17 +103,31 @@
                             }
                         </style>
                         <h1>Préparation du <span t-field="o.date_debut"/> au <span t-field="o.date_fin"/></h1>
-                        <table style="border:1px solid black; width:100%">
-                            <tr>
-                                <th style="width:60%;text-align:left">Fournisseur</th>
-                                <th style="width:20%;text-align:right">Montant stock</th>
-                                <th style="width:20%;text-align:right">Montant Cde</th>
-                            </tr>
-                            <tr t-foreach="o.fournisseur_ids" t-as="l">
-                                <td style="text-align:left"><span t-field="l.partner_id.name"/></td>
-                                <td style="text-align:right"><t t-esc='"{:,.0f}".format(l.montant_stock).replace(","," ").replace(".",",")'      /></td>
-                                <td style="text-align:right"><t t-esc='"{:,.0f}".format(l.montant_cde).replace(","," ").replace(".",",")'    /></td>
-                            </tr>
+                        <table style="border:1px solid black; width:60%">
+                            <thead>
+                                <tr>
+                                    <th style="width:50%;text-align:left">Fournisseur</th>
+                                    <th style="width:25%;text-align:right">Montant stock</th>
+                                    <th style="width:25%;text-align:right">Montant Cde</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="stock_total" t-value="0"/>
+                                <t t-set="cde_total"   t-value="0"/>
+                                <tr t-foreach="o.fournisseur_ids" t-as="l">
+                                    <t t-set="stock_total" t-value="stock_total + l.montant_stock"/>
+                                    <t t-set="cde_total"   t-value="cde_total   + l.montant_cde"/>
+
+                                    <td style="text-align:left"><span t-field="l.partner_id.name"/></td>
+                                    <td style="text-align:right"><t t-esc='"{:,.0f}".format(l.montant_stock).replace(","," ").replace(".",",")'      /></td>
+                                    <td style="text-align:right"><t t-esc='"{:,.0f}".format(l.montant_cde).replace(","," ").replace(".",",")'    /></td>
+                                </tr>
+                                <tr>
+                                    <th style="text-align:right">Total : </th>
+                                    <th style="text-align:right"><t t-esc='"{:,.0f}".format(stock_total).replace(","," ").replace(".",",")'/></th>
+                                    <th style="text-align:right"><t t-esc='"{:,.0f}".format(cde_total).replace(","," ").replace(".",",")'/></th>
+                                </tr>
+                            </tbody>
                        </table>
                     </div>
                 </t>
