@@ -8,4 +8,5 @@ import product
 import purchase
 import is_preparation_commande
 import is_imprime_etiquette
+import is_export_compta
 
