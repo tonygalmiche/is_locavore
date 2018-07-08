@@ -5,4 +5,6 @@ access_is_preparation_commande_fournisseur,access_is_preparation_commande_fourni
 access_is_postgres_function,access_is_postgres_function,model_is_postgres_function,,1,0,0,0
 access_is_imprime_etiquette_line,access_is_imprime_etiquette_line,model_is_imprime_etiquette_line,base.group_user,1,1,1,1
 access_is_imprime_etiquette,access_is_imprime_etiquette,model_is_imprime_etiquette,base.group_user,1,1,1,1
+access_is_export_compta,access_is_export_compta,model_is_export_compta,base.group_user,1,1,1,1
+access_is_export_compta_ligne,access_is_export_compta_ligne,model_is_export_compta_ligne,base.group_user,1,1,1,1
 
