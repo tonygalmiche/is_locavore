@@ -95,8 +95,7 @@ class is_export_compta(models.Model):
                 WHERE 
                     aml.date>='"""+str(obj.date_debut)+"""' and 
                     aml.date<='"""+str(obj.date_fin)+"""' and
-                    aa.code>'411100' and
-                    aa.code not like '512%' and 
+                    ((aa.code>'411100' and aa.code not like '512%') or aa.code='411000') and 
                     aj.type in ('sale','bank','general','cash')
                 GROUP BY aml.date, aa.code, aa.name
                 ORDER BY aml.date, aa.code, aa.name
