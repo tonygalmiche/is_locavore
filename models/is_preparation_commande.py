@@ -83,14 +83,16 @@ class IsPreparationCommande(models.Model):
                     ) prix_achat,
                     (
                         select sum(sq.qty)
-                        from stock_quant sq
-                        where sq.product_id=pp.id
+                        from stock_quant sq inner join stock_location sl on sq.location_id=sl.id 
+                        where sq.product_id=pp.id and sl.usage='internal' and sl.active='t'
                     ) stock,
                     pt.uom_po_id,
                     is_unit_coef(pt.uom_id,pt.uom_po_id)
                 from product_product pp inner join product_template pt on pp.product_tmpl_id=pt.id 
                 where pt.pos_categ_id is not null
             """
+
+
             if obj.designation:
                 sql=sql+" and pt.name ilike '"+obj.designation+"%' "
             sql=sql+" order by pt.name limit 50000"
