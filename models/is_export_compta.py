@@ -87,9 +87,7 @@ class is_export_compta(models.Model):
                     aml.date,
                     aa.code, 
                     aa.name,
-                    aj.type,
-                    sum(aml.debit), 
-                    sum(aml.credit)
+                    sum(aml.credit)-sum(aml.debit)
                 FROM account_move_line aml left outer join account_invoice ai        on aml.move_id=ai.move_id
                                            inner join account_account aa             on aml.account_id=aa.id
                                            left outer join res_partner rp            on aml.partner_id=rp.id
@@ -97,20 +95,29 @@ class is_export_compta(models.Model):
                 WHERE 
                     aml.date>='"""+str(obj.date_debut)+"""' and 
                     aml.date<='"""+str(obj.date_fin)+"""' and
-                    aa.code>'411100'
-                GROUP BY aml.date, aa.code, aa.name, aj.type
-                ORDER BY aml.date, aa.code, aa.name, aj.type
+                    aa.code>'411100' and
+                    aa.code not like '512%' and 
+                    aj.type in ('sale','bank','general','cash')
+                GROUP BY aml.date, aa.code, aa.name
+                ORDER BY aml.date, aa.code, aa.name
             """
             cr.execute(sql)
             for row in cr.fetchall():
+                montant=row[3]
+                debit=0
+                credit=0
+                if montant<0:
+                    debit=-montant
+                else:
+                    credit=montant
                 vals={
                     'export_compta_id'  : obj.id,
                     'date_facture'      : row[0],
                     'compte'            : row[1],
                     'libelle'           : s(row[2]),
-                    'journal'           : row[3],
-                    'debit'             : row[4],
-                    'credit'            : row[5],
+                    'journal'           : 'CAI',
+                    'debit'             : debit,
+                    'credit'            : credit,
                     'devise'            : u'EUR',
                 }
                 self.env['is.export.compta.ligne'].create(vals)
@@ -125,6 +132,11 @@ class is_export_compta(models.Model):
             name='export-compta.txt'
             dest     = '/tmp/'+name
             f = codecs.open(dest,'wb',encoding='utf-8')
+
+            f.write('##Transfert\r\n')
+            f.write('##Section\tDos\r\n')
+            f.write('EUR\r\n')
+            f.write('##Section\tMvt\r\n')
             for row in obj.ligne_ids:
                 compte=str(row.compte or '')
                 debit=row.debit
@@ -149,8 +161,10 @@ class is_export_compta(models.Model):
                 f.write(sens+'\t')
                 f.write('B\t')
                 f.write('"Caisse du '+date+'"\t')
-                f.write('"10"\t')
+                f.write('""\t') #N°de pièce vide
                 f.write('\r\n')
+            f.write('##Section\tJnl\r\n')
+            f.write('"CAI"\t"Caisse"\t"T"\r\n')
             f.close()
             r = open(dest,'rb').read().encode('base64')
             vals = {
