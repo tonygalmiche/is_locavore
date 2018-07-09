@@ -22,9 +22,6 @@ class PosOrder(models.Model):
             obj.is_total=total
 
 
-
-
-
     is_annee     = fields.Char(string='Année de la commande', compute='_compute', readonly=True, store=True)
     is_mois      = fields.Char(string='Mois de la commande' , compute='_compute', readonly=True, store=True)
     is_total     = fields.Float(string='Total' , compute='_compute_total', readonly=True, store=True)

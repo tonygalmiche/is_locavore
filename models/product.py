@@ -8,6 +8,13 @@ class ProductTemplate(models.Model):
     _order='name'
 
 
+
+    @api.depends('pos_categ_id')
+    def _compute_parent_pos_categ_id(self):
+        for obj in self:
+            obj.is_parent_pos_categ_id=obj.pos_categ_id.parent_id
+
+
     @api.depends('is_prix_achat','is_coef_multi_propose','list_price','lst_price','taxes_id','supplier_taxes_id')
     def _compute(self):
         for obj in self:
@@ -35,18 +42,19 @@ class ProductTemplate(models.Model):
             obj.is_prix_fournisseur=x
             obj.is_stock_valorise=x*obj.qty_available
 
-    is_prix_fournisseur   = fields.Float("Prix fournisseur HT", compute='_is_prix_fournisseur', store=False, readonly=True)
-    is_stock_valorise     = fields.Float("Stock valorisé"     , compute='_is_prix_fournisseur', store=False, readonly=True)
-    is_prix_achat         = fields.Float("Prix d'achat HT")
-    is_coef_multi_propose = fields.Float("Coeficient")
-    is_taux_tva_achat     = fields.Float("Taux de TVA Achat"                , compute='_compute', store=True, readonly=True)
-    is_taux_tva_vente     = fields.Float("Taux de TVA Vente"                , compute='_compute', store=True, readonly=True)
-    is_prix_vente_propose = fields.Float("Prix de vente TTC calculé"        , compute='_compute', store=True, readonly=True)
-    is_coef_multi_calcule = fields.Float("Coef. calculé"                    , compute='_compute', store=True, readonly=True)
-    is_designation        = fields.Char("Désignation étiquette")
-    is_contenance         = fields.Integer("Contenance")
-    is_contenance_uom_id  = fields.Many2one('product.uom', "Unité de contenance")
-    is_id_clyo            = fields.Char("Id Clyo")
+    is_prix_fournisseur    = fields.Float("Prix fournisseur HT", compute='_is_prix_fournisseur', store=False, readonly=True)
+    is_stock_valorise      = fields.Float("Stock valorisé"     , compute='_is_prix_fournisseur', store=False, readonly=True)
+    is_prix_achat          = fields.Float("Prix d'achat HT")
+    is_coef_multi_propose  = fields.Float("Coeficient")
+    is_taux_tva_achat      = fields.Float("Taux de TVA Achat"                , compute='_compute', store=True, readonly=True)
+    is_taux_tva_vente      = fields.Float("Taux de TVA Vente"                , compute='_compute', store=True, readonly=True)
+    is_prix_vente_propose  = fields.Float("Prix de vente TTC calculé"        , compute='_compute', store=True, readonly=True)
+    is_coef_multi_calcule  = fields.Float("Coef. calculé"                    , compute='_compute', store=True, readonly=True)
+    is_designation         = fields.Char("Désignation étiquette")
+    is_contenance          = fields.Integer("Contenance")
+    is_contenance_uom_id   = fields.Many2one('product.uom', "Unité de contenance")
+    is_id_clyo             = fields.Char("Id Clyo")
+    is_parent_pos_categ_id = fields.Many2one('pos.category', "Catégorie mère", compute='_compute_parent_pos_categ_id', store=True, readonly=True)
 
 
     @api.multi
