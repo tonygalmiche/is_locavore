@@ -29,7 +29,7 @@ class IsPreparationCommande(models.Model):
     line_ids        = fields.One2many('is.preparation.commande.line'       , 'preparation_id', u'Lignes')
     fournisseur_ids = fields.One2many('is.preparation.commande.fournisseur', 'preparation_id', u'Fournisseurs')
     designation     = fields.Char("Désignation article")
-    besoins         = fields.Boolean("Uniquement les fournisseurs ayant des besoins", default=True)
+    besoins         = fields.Boolean("Uniquement les fournisseurs ayant des besoins", default=False)
 
 
     @api.multi
