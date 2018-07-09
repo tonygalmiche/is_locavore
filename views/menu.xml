@@ -12,6 +12,15 @@
             action="is_account_move_line_action"
         />
 
+        <!-- Lignes des tickets -->
+        <menuitem 
+            id="is_pos_order_line_menu"
+            sequence="30"
+            name="Lignes des tickets"
+            parent="point_of_sale.menu_point_rep"
+            action="is_pos_order_line_action"
+        />
+
 
         <!-- Préparation de commandes -->
         <menuitem 

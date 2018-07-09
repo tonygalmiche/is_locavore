@@ -7,4 +7,5 @@ access_is_imprime_etiquette_line,access_is_imprime_etiquette_line,model_is_impri
 access_is_imprime_etiquette,access_is_imprime_etiquette,model_is_imprime_etiquette,base.group_user,1,1,1,1
 access_is_export_compta,access_is_export_compta,model_is_export_compta,base.group_user,1,1,1,1
 access_is_export_compta_ligne,access_is_export_compta_ligne,model_is_export_compta_ligne,base.group_user,1,1,1,1
+access_is_pos_order_line,access_is_pos_order_line,model_is_pos_order_line,base.group_user,1,0,0,0
 
