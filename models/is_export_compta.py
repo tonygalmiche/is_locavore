@@ -109,17 +109,18 @@ class is_export_compta(models.Model):
                     debit=-montant
                 else:
                     credit=montant
-                vals={
-                    'export_compta_id'  : obj.id,
-                    'date_facture'      : row[0],
-                    'compte'            : row[1],
-                    'libelle'           : s(row[2]),
-                    'journal'           : 'CAI',
-                    'debit'             : debit,
-                    'credit'            : credit,
-                    'devise'            : u'EUR',
-                }
-                self.env['is.export.compta.ligne'].create(vals)
+                if montant:
+                    vals={
+                        'export_compta_id'  : obj.id,
+                        'date_facture'      : row[0],
+                        'compte'            : row[1],
+                        'libelle'           : s(row[2]),
+                        'journal'           : 'CAI',
+                        'debit'             : debit,
+                        'credit'            : credit,
+                        'devise'            : u'EUR',
+                    }
+                    self.env['is.export.compta.ligne'].create(vals)
             self.generer_fichier()
 
 
