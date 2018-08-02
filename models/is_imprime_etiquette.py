@@ -68,7 +68,10 @@ class IsImprimeEtiquetteLine(models.Model):
                 except:
                     x=False
                 if x:
-                    prix_kg=product.lst_price*x/product.is_contenance
+                    div=product.is_contenance
+                    if div==0:
+                        div=1
+                    prix_kg=product.lst_price*x/div
 
             designation=product.name.upper()
             if product.is_designation:

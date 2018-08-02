@@ -8,6 +8,15 @@
             <xpath expr="//sheet" position="attributes">
                 <attribute name="class">oe_form_sheet_width_wider</attribute>
             </xpath>
+            <xpath expr="//header/field[@name='state']" position="before">
+                <button
+                    name="facture_recue_action"
+                    string="Facture reçue"
+                    type="object"
+                    attrs="{'invisible': [('invoice_status', 'in', ('no','invoiced'))]}"
+                    confirm="Voulez-vous vraiment passer cette commande à l'état 'Facture reçue' ?"
+                />
+            </xpath>
         </field>
     </record>
 </odoo>

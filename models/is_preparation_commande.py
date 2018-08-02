@@ -102,6 +102,8 @@ class IsPreparationCommande(models.Model):
             d2=datetime.datetime.strptime(obj.date_fin, '%Y-%m-%d')
             delta = d2 - d1
             nb_jours=delta.days
+            if nb_jours==0:
+                nb_jours=1
             fournisseurs={}
             for row in result:
 
@@ -207,13 +209,13 @@ class IsPreparationCommandeLine(models.Model):
     product_id      = fields.Many2one('product.product' , "Article"  , readonly=True)
     uom_po_id       = fields.Many2one('product.uom' , "Unité d'achat", readonly=True)
     pos_categ_id    = fields.Many2one('pos.category'  , "Catégorie"  , readonly=True)
-    vente_total     = fields.Float("Ventes totales", digits=(12,0)   , readonly=True)
-    vente_jour      = fields.Float("Ventes par jour", digits=(12,1)  , readonly=True)
-    vente_frq       = fields.Float("Ventes x Frq x 1.1", digits=(12,0), readonly=True)
-    stock           = fields.Float("Stock", digits=(12,0), readonly=True)
-    qt_cde          = fields.Float("Qt en Cde", digits=(12,0), readonly=True)
-    qt_suggeree     = fields.Float("Qt suggérée", digits=(12,0))
-    nb_jours_stock  = fields.Float("Nb jours stock", digits=(12,0), readonly=True)
+    vente_total     = fields.Float("Ventes totales", digits=(12,2)   , readonly=True)
+    vente_jour      = fields.Float("Ventes par jour", digits=(12,2)  , readonly=True)
+    vente_frq       = fields.Float("Ventes x Frq x 1.1", digits=(12,2), readonly=True)
+    stock           = fields.Float("Stock", digits=(12,2), readonly=True)
+    qt_cde          = fields.Float("Qt en Cde", digits=(12,2), readonly=True)
+    qt_suggeree     = fields.Float("Qt suggérée", digits=(12,2))
+    nb_jours_stock  = fields.Float("Nb jours stock", digits=(12,2), readonly=True)
     prix_achat      = fields.Float("Prix achat")
     montant_cde     = fields.Float("Montant Cde suggérée", digits=(12,2), readonly=True, compute='_compute', store=True)
     montant_stock   = fields.Float("Montant stock actuel", digits=(12,0), readonly=True)

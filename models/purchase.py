@@ -5,6 +5,17 @@ from datetime import datetime
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 
+
+class PurchaseOrder(models.Model):
+    _inherit = 'purchase.order'
+
+
+    @api.multi
+    def facture_recue_action(self):
+        for obj in self:
+            obj.invoice_status='invoiced'
+
+
 class PurchaseOrderLine(models.Model):
     _inherit = 'purchase.order.line'
 
