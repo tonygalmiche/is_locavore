@@ -43,6 +43,9 @@ class ProductTemplate(models.Model):
             obj.is_prix_fournisseur=x
             obj.is_stock_valorise=x*obj.qty_available
 
+
+
+    pos_categ_id           = fields.Many2one('pos.category', string='Point of Sale Category', index=True)
     is_prix_fournisseur    = fields.Float("Prix fournisseur HT", compute='_is_prix_fournisseur', store=False, readonly=True, digits=dp.get_precision('Product Price'))
     is_stock_valorise      = fields.Float("Stock valorisé"     , compute='_is_prix_fournisseur', store=False, readonly=True)
     is_prix_achat          = fields.Float("Prix d'achat HT", digits=dp.get_precision('Product Price'))

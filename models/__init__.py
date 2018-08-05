@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import is_postgres_function
+import pos_category
 import pos_order
 import pos_session
 import res_partner
@@ -10,3 +11,4 @@ import is_preparation_commande
 import is_imprime_etiquette
 import is_export_compta
 import is_pos_order_line
+

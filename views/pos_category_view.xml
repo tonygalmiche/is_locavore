@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="is_product_pos_category_form_view" model="ir.ui.view">
+        <field name="name">is_product_pos_category_form_view</field>
+        <field name="model">pos.category</field>
+        <field name="inherit_id" ref="point_of_sale.product_pos_category_form_view"/>
+        <field name="arch" type="xml">
+            <field name="sequence" position="after">
+                <field name="is_nb_articles"/>
+                <field name="active"/>
+            </field>
+        </field>
+    </record>
     <record id="is_product_pos_category_tree_view" model="ir.ui.view">
         <field name="name">is_product_pos_category_tree_view</field>
         <field name="model">pos.category</field>
@@ -7,6 +18,18 @@
         <field name="arch" type="xml">
             <field name="display_name" position="before">
                 <field name="parent_id"/>
+            </field>
+            <field name="display_name" position="after">
+                <button 
+                    string="Liste des articles" 
+                    name= "liste_articles_action" type="object" icon="fa-list"
+                />
+                <field name="is_nb_articles"/>
+                <button 
+                    string="Liste des categories" 
+                    name= "liste_categories_action" type="object" icon="fa-list"
+                />
+                <field name="is_nb_categories"/>
             </field>
         </field>
     </record>
@@ -20,4 +43,17 @@
             </search>
         </field>
     </record>
+
+
+    <record id="point_of_sale.product_pos_category_action" model="ir.actions.act_window">
+        <field name="name">Pos Product Categories</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">pos.category</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" eval="False"/>
+        <field name="limit">500</field>
+    </record>
+
+
 </odoo>
