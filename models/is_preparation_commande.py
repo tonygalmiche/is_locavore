@@ -2,17 +2,7 @@
 
 from odoo import api, fields, models, tools, _
 import datetime
-
-
-#TODO : 
-# - Ajouter un total par fournisseur directement dans la fiche principale avec une loupe pour accèder au détail
-# - Faire une version imprimable de cette fiche avec les fournisseurs
-# - Calculer les colonnes manquantes
-# - Générer la commande fournisseur avec un bouton depuis la liste des fournisseurs et ajouter un lien vers celle-ci 
-
-
-# TODO : Ajouter le montant du stock dans la liste par fournisseur 
-# TODO : Bug sur les untités (Sac de fariens, oeufs,...)
+import odoo.addons.decimal_precision as dp
 
 
 def _date_creation():
@@ -174,9 +164,6 @@ class IsPreparationCommande(models.Model):
                         'montant_stock' : montant_stock,
                         'montant_cde'   : montant_cde,
                     }
-
-
-
                     res=self.env['is.preparation.commande.fournisseur'].create(vals)
 
 
@@ -216,7 +203,7 @@ class IsPreparationCommandeLine(models.Model):
     qt_cde          = fields.Float("Qt en Cde", digits=(12,2), readonly=True)
     qt_suggeree     = fields.Float("Qt suggérée", digits=(12,2))
     nb_jours_stock  = fields.Float("Nb jours stock", digits=(12,2), readonly=True)
-    prix_achat      = fields.Float("Prix achat")
+    prix_achat      = fields.Float("Prix achat", digits=dp.get_precision('Product Price'))
     montant_cde     = fields.Float("Montant Cde suggérée", digits=(12,2), readonly=True, compute='_compute', store=True)
     montant_stock   = fields.Float("Montant stock actuel", digits=(12,0), readonly=True)
     partner_id      = fields.Many2one('res.partner', "Fournisseur", readonly=True)
@@ -286,11 +273,5 @@ class IsPreparationCommandeFournisseur(models.Model):
                     }
                     line=order_line_obj.create(vals)
                 obj.order_id=order.id
-
-
-
-
-
-
 
 
