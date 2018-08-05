@@ -56,11 +56,12 @@
                 <field name="is_designation" />
                 <field name="is_contenance"/>
                 <field name="is_contenance_uom_id"/>
+                <!--
                 <field name="taxes_id"/>
                 <field name="property_account_income_id"/>
                 <field name="supplier_taxes_id"/>
                 <field name="property_account_expense_id"/>
-
+                -->
             </tree>
         </field>
     </record>
