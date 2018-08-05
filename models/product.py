@@ -54,7 +54,7 @@ class ProductTemplate(models.Model):
     is_contenance          = fields.Integer("Contenance")
     is_contenance_uom_id   = fields.Many2one('product.uom', "Unité de contenance")
     is_id_clyo             = fields.Char("Id Clyo")
-    is_parent_pos_categ_id = fields.Many2one('pos.category', "Catégorie mère", compute='_compute_parent_pos_categ_id', store=True, readonly=True)
+    is_parent_pos_categ_id = fields.Many2one('pos.category', "Catégorie mère", compute='_compute_parent_pos_categ_id', store=True, readonly=True, index=True)
 
 
     @api.multi
