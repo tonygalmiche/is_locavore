@@ -26,5 +26,19 @@
             <field name="paperformat_id" ref="is_locavore.is_imprime_etiquette_paperformat"/>
         </record>
 
+
+        <report 
+            id="is_imprime_etiquette_producteur_reports"
+            model="res.partner"
+            string="Etiquettes"
+            report_type="qweb-pdf"
+            name="is_locavore.is_imprime_etiquette_producteur_report"
+            file="is_locavore.is_imprime_etiquette_producteur_report"
+        />
+        <record id="is_imprime_etiquette_producteur_reports" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="is_locavore.is_imprime_etiquette_producteur_paperformat"/>
+        </record>
+
+
     </data>
 </odoo>

@@ -11,6 +11,8 @@
                 <field name="category_id" position="after">
                     <field name="is_prenom"/>
                     <field name="is_nom"/>
+                    <field name="is_distance"/>
+                    <field name="is_sens_fleche"/>
                 </field>
                 <field name="lang" position="after">
                     <field name="is_code"/>
@@ -19,8 +21,6 @@
 
             </field>
         </record>
-
-
        <record id="is_view_partner_tree" model="ir.ui.view">
             <field name="name">is_view_partner_tree</field>
             <field name="model">res.partner</field>
