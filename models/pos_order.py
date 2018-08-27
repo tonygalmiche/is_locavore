@@ -9,6 +9,11 @@ class PosOrder(models.Model):
     @api.depends('date_order')
     def _compute(self):
         for obj in self:
+            paiements={}
+            for row in obj.statement_ids:
+                x=row.journal_id.name
+                paiements[x]=x
+            obj.is_paiement=', '.join(paiements)
             if obj.date_order:
                 obj.is_annee = obj.date_order[:4]
                 obj.is_mois  = obj.date_order[5:7]
@@ -22,10 +27,20 @@ class PosOrder(models.Model):
             obj.is_total=total
 
 
+    @api.depends('statement_ids')
+    def _compute_paiement(self):
+        for obj in self:
+            paiements={}
+            for row in obj.statement_ids:
+                x=row.journal_id.name
+                paiements[x]=x
+            obj.is_paiement=', '.join(paiements)
+
+
     is_annee     = fields.Char(string='Année de la commande', compute='_compute', readonly=True, store=True)
     is_mois      = fields.Char(string='Mois de la commande' , compute='_compute', readonly=True, store=True)
     is_total     = fields.Float(string='Total' , compute='_compute_total', readonly=True, store=True)
-
+    is_paiement  = fields.Char(string='Paiement', compute='_compute_paiement', readonly=True, store=True)
 
 
 class PosOrderLine(models.Model):

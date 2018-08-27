@@ -30,11 +30,24 @@
                     <field name="is_mois"/>
                     <field name="is_total"     sum="Total" widget="monetary"/>
                     <field name="amount_total" sum="Total" widget="monetary"/>
+                    <field name="is_paiement"/>
                     <field name="company_id" groups="base.group_multi_company"/>
                     <field name="state"/>
                     <field name="session_id" />
                 </tree>
             </tree>
+        </field>
+    </record>
+
+
+    <record id="is_view_pos_order_filter" model="ir.ui.view">
+        <field name="name">is_view_pos_order_filter</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_order_filter" />
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="is_paiement"/>
+            </field>
         </field>
     </record>
 
