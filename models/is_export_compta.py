@@ -19,7 +19,11 @@ class is_export_compta(models.Model):
     _order='name desc'
 
     name               = fields.Char("N°Folio"      , readonly=True)
-    journal_id         = fields.Many2one('account.journal', 'Journal')
+    #journal_id         = fields.Many2one('account.journal', 'Journal')
+    journal = fields.Selection([
+        ('CAI', 'Caisse'),
+        ('HA' , 'Achats'),
+    ], 'Journal', default='CAI')
     date_debut         = fields.Date("Date de début", required=True)
     date_fin           = fields.Date("Date de fin"  , required=True)
     ligne_ids          = fields.One2many('is.export.compta.ligne', 'export_compta_id', u'Lignes')
@@ -38,43 +42,175 @@ class is_export_compta(models.Model):
         return res
 
 
+
+
+
     @api.multi
-    def action_envoi_mail(self):
-        body_html=u"""
-        <html>
-          <head>
-            <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-          </head>
-          <body>
-            <font>Bonjour, </font>
-            <br><br>
-            <font>Ci-joint le fichier</font>
-          </body>
-        </html>
-        """
+    def action_export_compta2(self):
+        cr=self._cr
         for obj in self:
-            user  = self.env['res.users'].browse(self._uid)
-            email = user.email
-            nom   = user.name
-            if email==False:
-                raise Warning(u"Votre mail n'est pas renseigné !")
-            if email:
-                attachment_id = self.env['ir.attachment'].search([
-                    ('res_model','=','is.export.compta'),
-                    ('res_id'   ,'=',obj.id),
-                    ('name'     ,'=','export-compta.txt')
-                ])
-                email_vals = {}
-                email_vals.update({
-                    'subject'       : 'Export compta Odoo',
-                    'email_to'      : email, 
-                    'email_from'    : email, 
-                    'body_html'     : body_html.encode('utf-8'), 
-                    'attachment_ids': [(6, 0, [attachment_id.id])] 
-                })
-                email_id=self.env['mail.mail'].create(email_vals)
-                if email_id:
-                    self.env['mail.mail'].send(email_id)
+            obj.ligne_ids.unlink()
+
+            if obj.journal=='CAI':
+                sql="""
+                    SELECT  
+                        aml.date,
+                        aa.code, 
+                        aa.name,
+                        '',
+                        '',
+                        '',
+                        sum(aml.credit)-sum(aml.debit)
+                    FROM account_move_line aml left outer join account_invoice ai        on aml.move_id=ai.move_id
+                                               inner join account_account aa             on aml.account_id=aa.id
+                                               left outer join res_partner rp            on aml.partner_id=rp.id
+                                               inner join account_journal aj             on aml.journal_id=aj.id
+                    WHERE 
+                        aml.date>='"""+str(obj.date_debut)+"""' and 
+                        aml.date<='"""+str(obj.date_fin)+"""' and 
+                        ((aa.code>'411100' and aa.code not like '512%') or aa.code='411000') and 
+                        aj.type in ('sale','bank','general','cash')
+                    GROUP BY aml.date, aa.code, aa.name
+                    ORDER BY aml.date, aa.code, aa.name
+                """
+
+
+            if obj.journal=='HA':
+                sql="""
+                    SELECT  
+                        aml.date,
+                        aa.code, 
+                        aa.name,
+                        aj.code,
+                        ai.number,
+                        rp.name,
+                        sum(aml.credit)-sum(aml.debit)
+                    FROM account_move_line aml left outer join account_invoice ai        on aml.move_id=ai.move_id
+                                               inner join account_account aa             on aml.account_id=aa.id
+                                               left outer join res_partner rp            on aml.partner_id=rp.id
+                                               inner join account_journal aj             on aml.journal_id=aj.id
+                    WHERE 
+                        aml.date>='"""+str(obj.date_debut)+"""' and 
+                        aml.date<='"""+str(obj.date_fin)+"""' and 
+                        aj.code='FACTU'
+                    GROUP BY ai.number,aml.date, aa.code, aa.name,aj.code,rp.name
+                    ORDER BY ai.number,aml.date, aa.code, aa.name,aj.code,rp.name
+                """
+            cr.execute(sql)
+            for row in cr.fetchall():
+                print row
+                montant=row[6]
+                debit=0
+                credit=0
+                if montant<0:
+                    debit=-montant
+                else:
+                    credit=montant
+
+
+                date_facture=row[0]
+
+                date=date_facture
+                date=datetime.datetime.strptime(date, '%Y-%m-%d')
+                date=date.strftime('%d/%m/%Y')
+
+                libelle_piece='Caisse du '+date
+                if obj.journal=='HA':
+                    libelle_piece=row[5]
+
+                if montant:
+                    vals={
+                        'export_compta_id'  : obj.id,
+                        'date_facture'      : date_facture,
+                        'compte'            : row[1],
+                        'libelle'           : s(row[2]),
+                        'piece'             : row[4],
+                        'libelle_piece'     : libelle_piece,
+                        'journal'           : obj.journal,
+                        'debit'             : debit,
+                        'credit'            : credit,
+                        'devise'            : u'EUR',
+                    }
+
+
+                    self.env['is.export.compta.ligne'].create(vals)
+            self.generer_fichier2()
+
+
+    def generer_fichier2(self):
+        for obj in self:
+            model='is.export.compta'
+            attachments = self.env['ir.attachment'].search([('res_model','=',model),('res_id','=',obj.id)])
+            attachments.unlink()
+            name='export-compta.txt'
+            dest     = '/tmp/'+name
+            f = codecs.open(dest,'wb',encoding='utf-8')
+
+            f.write('##Transfert\r\n')
+            f.write('##Section\tDos\r\n')
+            f.write('EUR\r\n')
+            f.write('##Section\tMvt\r\n')
+            for row in obj.ligne_ids:
+                compte=str(row.compte or '')
+                debit=row.debit
+                credit=row.debit
+                if row.credit>0.0:
+                    montant=row.credit  
+                    sens='C'
+                else:
+                    montant=row.debit  
+                    sens='D'
+                montant='%0.2f' % montant
+                date=row.date_facture
+                date=datetime.datetime.strptime(date, '%Y-%m-%d')
+                date=date.strftime('%d/%m/%Y')
+
+
+                #libelle=row.libelle or u'??'
+                #libelle2='Caisse du '+date
+                #if obj.journal=='HA':
+                #    libelle2='x'
+
+                f.write('"'+obj.name+'"\t')
+                f.write('"'+obj.journal+'"\t')
+                f.write('"'+date+'"\t')
+                f.write('"'+compte+'"\t')
+                f.write('"'+row.libelle+'"\t')
+                f.write('"'+montant+'"\t')
+                f.write(sens+'\t')
+                f.write('B\t')
+                f.write('"'+row.libelle_piece+'"\t')
+                f.write('"'+row.piece+'"\t') #N°de pièce vide
+                f.write('\r\n')
+            f.write('##Section\tJnl\r\n')
+            f.write('"CAI"\t"Caisse"\t"T"\r\n')
+            f.close()
+            r = open(dest,'rb').read().encode('base64')
+            vals = {
+                'name':        name,
+                'datas_fname': name,
+                'type':        'binary',
+                'res_model':   model,
+                'res_id':      obj.id,
+                'datas':       r,
+            }
+            id = self.env['ir.attachment'].create(vals)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     @api.multi
@@ -187,8 +323,9 @@ class is_export_compta_ligne(models.Model):
     date_facture     = fields.Date("Date")
     journal          = fields.Char("Journal")
     compte           = fields.Char("N°Compte")
+    libelle          = fields.Char("Libellé Compte")
     piece            = fields.Char("Pièce")
-    libelle          = fields.Char("Libellé")
+    libelle_piece    = fields.Char("Libellé Piece")
     debit            = fields.Float("Débit")
     credit           = fields.Float("Crédit")
     devise           = fields.Char("Devise")

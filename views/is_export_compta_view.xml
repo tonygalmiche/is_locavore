@@ -20,6 +20,8 @@
                     <field name="date_facture" />
                     <field name="compte" />
                     <field name="libelle" />
+                    <field name="piece" />
+                    <field name="libelle_piece" />
                     <field name="debit"  sum="Total"/>
                     <field name="credit" sum="Total"/>
                 </tree>
@@ -37,6 +39,8 @@
                                 <field name="date_facture" />
                                 <field name="compte" />
                                 <field name="libelle" />
+                                <field name="piece" />
+                                <field name="libelle_piece" />
                                 <field name="debit" />
                                 <field name="credit" />
                             </group>
@@ -51,8 +55,9 @@
             <field name="arch" type="xml">
                 <search>
                     <field name="compte"/>
-                    <field name="piece"/>
                     <field name="libelle"/>
+                    <field name="piece"/>
+                    <field name="libelle_piece"/>
                     <field name="commentaire" />
                     <group expand="0" string="Regrouper par...">
                         <filter string="Compte"        context="{'group_by':'compte'}"/>
@@ -78,7 +83,7 @@
             <field name="arch" type="xml">
                 <tree >
                     <field name="name" />
-                    <field name="journal_id" />
+                    <field name="journal" />
                     <field name="date_debut" />
                     <field name="date_fin" />
                 </tree>
@@ -91,11 +96,13 @@
                 <form>
                     <header>
                         <button name="action_export_compta"              type="object" string="Générer les lignes"/>
+                        <button name="action_export_compta2"             type="object" string="Générer les lignes (v2)"/>
                         <button name="%(is_export_compta_ligne_action)d" type="action" string="Voir les lignes"/>
                     </header>
                     <sheet>
                         <group>
                             <field name="name" />
+                            <field name="journal" />
                             <field name="date_debut" />
                             <field name="date_fin" />
                         </group>
