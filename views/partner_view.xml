@@ -11,12 +11,15 @@
                 <field name="category_id" position="after">
                     <field name="is_prenom"/>
                     <field name="is_nom"/>
-                    <field name="is_distance"/>
-                    <field name="is_sens_fleche"/>
+                    <field name="is_distance"        attrs="{'invisible': [('supplier', '!=', True)]}"/>
+                    <field name="is_sens_fleche"     attrs="{'invisible': [('supplier', '!=', True)]}"/>
                 </field>
                 <field name="lang" position="after">
-                    <field name="is_code"/>
-                    <field name="is_frequence"/>
+                    <field name="is_code"            attrs="{'invisible': [('supplier', '!=', True)]}"/>
+                    <field name="is_frequence"       attrs="{'invisible': [('supplier', '!=', True)]}"/>
+                    <field name="is_jour_panier"     attrs="{'invisible': [('customer', '!=', True)]}"/>
+                    <field name="is_semaine_panier"  attrs="{'invisible': [('customer', '!=', True)]}"/>
+                    <field name="is_consigne_panier" attrs="{'invisible': [('customer', '!=', True)]}"/>
                 </field>
 
             </field>
@@ -39,6 +42,8 @@
                     <field name="city"/>
                     <field name="is_code"/>
                     <field name="is_frequence"/>
+                    <field name="is_jour_panier"/>
+                    <field name="is_semaine_panier"/>
                 </field>
             </field>
         </record>

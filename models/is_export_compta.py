@@ -83,7 +83,7 @@ class is_export_compta(models.Model):
                         aa.name,
                         aj.code,
                         ai.number,
-                        rp.name,
+                        rp.is_code,
                         sum(aml.credit)-sum(aml.debit)
                     FROM account_move_line aml left outer join account_invoice ai        on aml.move_id=ai.move_id
                                                inner join account_account aa             on aml.account_id=aa.id
@@ -93,8 +93,8 @@ class is_export_compta(models.Model):
                         aml.date>='"""+str(obj.date_debut)+"""' and 
                         aml.date<='"""+str(obj.date_fin)+"""' and 
                         aj.code='FACTU'
-                    GROUP BY ai.number,aml.date, aa.code, aa.name,aj.code,rp.name
-                    ORDER BY ai.number,aml.date, aa.code, aa.name,aj.code,rp.name
+                    GROUP BY ai.number,aml.date, aa.code, aa.name,aj.code,rp.is_code
+                    ORDER BY ai.number,aml.date, aa.code, aa.name,aj.code,rp.is_code
                 """
             cr.execute(sql)
             for row in cr.fetchall():
@@ -213,105 +213,105 @@ class is_export_compta(models.Model):
 
 
 
-    @api.multi
-    def action_export_compta(self):
-        cr=self._cr
-        for obj in self:
-            obj.ligne_ids.unlink()
-            sql="""
-                SELECT  
-                    aml.date,
-                    aa.code, 
-                    aa.name,
-                    sum(aml.credit)-sum(aml.debit)
-                FROM account_move_line aml left outer join account_invoice ai        on aml.move_id=ai.move_id
-                                           inner join account_account aa             on aml.account_id=aa.id
-                                           left outer join res_partner rp            on aml.partner_id=rp.id
-                                           inner join account_journal aj             on aml.journal_id=aj.id
-                WHERE 
-                    aml.date>='"""+str(obj.date_debut)+"""' and 
-                    aml.date<='"""+str(obj.date_fin)+"""' and
-                    ((aa.code>'411100' and aa.code not like '512%') or aa.code='411000') and 
-                    aj.type in ('sale','bank','general','cash')
-                GROUP BY aml.date, aa.code, aa.name
-                ORDER BY aml.date, aa.code, aa.name
-            """
-            cr.execute(sql)
-            for row in cr.fetchall():
-                montant=row[3]
-                debit=0
-                credit=0
-                if montant<0:
-                    debit=-montant
-                else:
-                    credit=montant
-                if montant:
-                    vals={
-                        'export_compta_id'  : obj.id,
-                        'date_facture'      : row[0],
-                        'compte'            : row[1],
-                        'libelle'           : s(row[2]),
-                        'journal'           : 'CAI',
-                        'debit'             : debit,
-                        'credit'            : credit,
-                        'devise'            : u'EUR',
-                    }
-                    self.env['is.export.compta.ligne'].create(vals)
-            self.generer_fichier()
+#    @api.multi
+#    def action_export_compta(self):
+#        cr=self._cr
+#        for obj in self:
+#            obj.ligne_ids.unlink()
+#            sql="""
+#                SELECT  
+#                    aml.date,
+#                    aa.code, 
+#                    aa.name,
+#                    sum(aml.credit)-sum(aml.debit)
+#                FROM account_move_line aml left outer join account_invoice ai        on aml.move_id=ai.move_id
+#                                           inner join account_account aa             on aml.account_id=aa.id
+#                                           left outer join res_partner rp            on aml.partner_id=rp.id
+#                                           inner join account_journal aj             on aml.journal_id=aj.id
+#                WHERE 
+#                    aml.date>='"""+str(obj.date_debut)+"""' and 
+#                    aml.date<='"""+str(obj.date_fin)+"""' and
+#                    ((aa.code>'411100' and aa.code not like '512%') or aa.code='411000') and 
+#                    aj.type in ('sale','bank','general','cash')
+#                GROUP BY aml.date, aa.code, aa.name
+#                ORDER BY aml.date, aa.code, aa.name
+#            """
+#            cr.execute(sql)
+#            for row in cr.fetchall():
+#                montant=row[3]
+#                debit=0
+#                credit=0
+#                if montant<0:
+#                    debit=-montant
+#                else:
+#                    credit=montant
+#                if montant:
+#                    vals={
+#                        'export_compta_id'  : obj.id,
+#                        'date_facture'      : row[0],
+#                        'compte'            : row[1],
+#                        'libelle'           : s(row[2]),
+#                        'journal'           : 'CAI',
+#                        'debit'             : debit,
+#                        'credit'            : credit,
+#                        'devise'            : u'EUR',
+#                    }
+#                    self.env['is.export.compta.ligne'].create(vals)
+#            self.generer_fichier()
 
 
-    def generer_fichier(self):
-        for obj in self:
-            model='is.export.compta'
-            attachments = self.env['ir.attachment'].search([('res_model','=',model),('res_id','=',obj.id)])
-            attachments.unlink()
-            name='export-compta.txt'
-            dest     = '/tmp/'+name
-            f = codecs.open(dest,'wb',encoding='utf-8')
+#    def generer_fichier(self):
+#        for obj in self:
+#            model='is.export.compta'
+#            attachments = self.env['ir.attachment'].search([('res_model','=',model),('res_id','=',obj.id)])
+#            attachments.unlink()
+#            name='export-compta.txt'
+#            dest     = '/tmp/'+name
+#            f = codecs.open(dest,'wb',encoding='utf-8')
 
-            f.write('##Transfert\r\n')
-            f.write('##Section\tDos\r\n')
-            f.write('EUR\r\n')
-            f.write('##Section\tMvt\r\n')
-            for row in obj.ligne_ids:
-                compte=str(row.compte or '')
-                debit=row.debit
-                credit=row.debit
-                if row.credit>0.0:
-                    montant=row.credit  
-                    sens='C'
-                else:
-                    montant=row.debit  
-                    sens='D'
-                montant='%0.2f' % montant
-                date=row.date_facture
-                date=datetime.datetime.strptime(date, '%Y-%m-%d')
-                date=date.strftime('%d/%m/%Y')
-                libelle=row.libelle or u'??'
-                f.write('"'+obj.name+'"\t')
-                f.write('"CAI"\t')
-                f.write('"'+date+'"\t')
-                f.write('"'+compte+'"\t')
-                f.write('"'+libelle+'"\t')
-                f.write('"'+montant+'"\t')
-                f.write(sens+'\t')
-                f.write('B\t')
-                f.write('"Caisse du '+date+'"\t')
-                f.write('""\t') #N°de pièce vide
-                f.write('\r\n')
-            f.write('##Section\tJnl\r\n')
-            f.write('"CAI"\t"Caisse"\t"T"\r\n')
-            f.close()
-            r = open(dest,'rb').read().encode('base64')
-            vals = {
-                'name':        name,
-                'datas_fname': name,
-                'type':        'binary',
-                'res_model':   model,
-                'res_id':      obj.id,
-                'datas':       r,
-            }
-            id = self.env['ir.attachment'].create(vals)
+#            f.write('##Transfert\r\n')
+#            f.write('##Section\tDos\r\n')
+#            f.write('EUR\r\n')
+#            f.write('##Section\tMvt\r\n')
+#            for row in obj.ligne_ids:
+#                compte=str(row.compte or '')
+#                debit=row.debit
+#                credit=row.debit
+#                if row.credit>0.0:
+#                    montant=row.credit  
+#                    sens='C'
+#                else:
+#                    montant=row.debit  
+#                    sens='D'
+#                montant='%0.2f' % montant
+#                date=row.date_facture
+#                date=datetime.datetime.strptime(date, '%Y-%m-%d')
+#                date=date.strftime('%d/%m/%Y')
+#                libelle=row.libelle or u'??'
+#                f.write('"'+obj.name+'"\t')
+#                f.write('"CAI"\t')
+#                f.write('"'+date+'"\t')
+#                f.write('"'+compte+'"\t')
+#                f.write('"'+libelle+'"\t')
+#                f.write('"'+montant+'"\t')
+#                f.write(sens+'\t')
+#                f.write('B\t')
+#                f.write('"Caisse du '+date+'"\t')
+#                f.write('""\t') #N°de pièce vide
+#                f.write('\r\n')
+#            f.write('##Section\tJnl\r\n')
+#            f.write('"CAI"\t"Caisse"\t"T"\r\n')
+#            f.close()
+#            r = open(dest,'rb').read().encode('base64')
+#            vals = {
+#                'name':        name,
+#                'datas_fname': name,
+#                'type':        'binary',
+#                'res_model':   model,
+#                'res_id':      obj.id,
+#                'datas':       r,
+#            }
+#            id = self.env['ir.attachment'].create(vals)
 
 
 class is_export_compta_ligne(models.Model):

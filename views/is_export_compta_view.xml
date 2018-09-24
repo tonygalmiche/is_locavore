@@ -95,8 +95,8 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button name="action_export_compta"              type="object" string="Générer les lignes"/>
-                        <button name="action_export_compta2"             type="object" string="Générer les lignes (v2)"/>
+                        <!--<button name="action_export_compta"              type="object" string="Générer les lignes"/>-->
+                        <button name="action_export_compta2"             type="object" string="Générer les lignes"/>
                         <button name="%(is_export_compta_ligne_action)d" type="action" string="Voir les lignes"/>
                     </header>
                     <sheet>
