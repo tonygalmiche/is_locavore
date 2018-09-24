@@ -98,4 +98,41 @@
         action="is_product_template_action"
         parent="point_of_sale.menu_point_of_sale" sequence="3"/>
 
+
+
+    <record id="is_product_template_compta_tree_view" model="ir.ui.view">
+        <field name="name">is_product_template_compta_tree_view</field>
+        <field name="model">product.template</field>
+        <field eval="90" name="priority"/>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="pos_categ_id"/>
+                <field name="taxes_id"/>
+                <field name="property_account_income_id"/>
+                <field name="supplier_taxes_id"/>
+                <field name="property_account_expense_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="is_product_template_compta_action" model="ir.actions.act_window">
+        <field name="name">Articles (Compta)</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.template</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="context" eval="{'search_default_filter_to_availabe_pos': 1}"/>
+        <field name="domain" eval="[]"/>
+        <field name="search_view_id" eval="False"/> <!-- Force empty -->
+        <field name="view_id" eval="is_product_template_compta_tree_view"/>
+    </record>
+    <menuitem
+        name="Articles (Compta)"
+        id="is_product_template_compta_menu"
+        action="is_product_template_compta_action"
+        parent="point_of_sale.menu_point_of_sale" sequence="4"/>
+
+
+
 </odoo>
