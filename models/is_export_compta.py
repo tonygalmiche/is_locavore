@@ -19,13 +19,14 @@ class is_export_compta(models.Model):
     _order='name desc'
 
     name               = fields.Char("N°Folio"      , readonly=True)
-    #journal_id         = fields.Many2one('account.journal', 'Journal')
     journal = fields.Selection([
         ('CAI', 'Caisse'),
         ('HA' , 'Achats'),
     ], 'Journal', default='CAI')
-    date_debut         = fields.Date("Date de début", required=True)
-    date_fin           = fields.Date("Date de fin"  , required=True)
+    date_debut         = fields.Date("Date de début")
+    date_fin           = fields.Date("Date de fin")
+    facture_debut_id   = fields.Many2one('account.invoice', "Facture début")
+    facture_fin_id     = fields.Many2one('account.invoice', "Facture fin")
     ligne_ids          = fields.One2many('is.export.compta.ligne', 'export_compta_id', u'Lignes')
     _defaults = {
     }
@@ -40,9 +41,6 @@ class is_export_compta(models.Model):
             vals['name'] = self.env['ir.sequence'].get_id(sequence_id, 'id')
         res = super(is_export_compta, self).create(vals)
         return res
-
-
-
 
 
     @api.multi
@@ -89,16 +87,18 @@ class is_export_compta(models.Model):
                                                inner join account_account aa             on aml.account_id=aa.id
                                                left outer join res_partner rp            on aml.partner_id=rp.id
                                                inner join account_journal aj             on aml.journal_id=aj.id
-                    WHERE 
-                        aml.date>='"""+str(obj.date_debut)+"""' and 
-                        aml.date<='"""+str(obj.date_fin)+"""' and 
-                        aj.code='FACTU'
+                    WHERE aj.code='FACTU' and ai.state not in ('draft','cancel','paid') 
+                """
+                if obj.facture_debut_id:
+                    sql=sql+" and ai.number>='"+str(obj.facture_debut_id.number)+"' "
+                if obj.facture_fin_id:
+                    sql=sql+" and ai.number<='"+str(obj.facture_fin_id.number)+"' "
+                sql=sql+"""
                     GROUP BY ai.number,aml.date, aa.code, aa.name,aj.code,rp.is_code
                     ORDER BY ai.number,aml.date, aa.code, aa.name,aj.code,rp.is_code
                 """
             cr.execute(sql)
             for row in cr.fetchall():
-                print row
                 montant=row[6]
                 debit=0
                 credit=0
