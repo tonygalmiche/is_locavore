@@ -17,11 +17,12 @@
                 <field name="lang" position="after">
                     <field name="is_code"            attrs="{'invisible': [('supplier', '!=', True)]}"/>
                     <field name="is_frequence"       attrs="{'invisible': [('supplier', '!=', True)]}"/>
-                    <field name="is_jour_panier"     attrs="{'invisible': [('customer', '!=', True)]}"/>
                     <field name="is_semaine_panier"  attrs="{'invisible': [('customer', '!=', True)]}"/>
+                    <field name="is_jour_panier"     attrs="{'invisible': [('customer', '!=', True)]}"/>
+                    <field name="is_horaire_panier"  attrs="{'invisible': [('customer', '!=', True)]}"/>
+                    <field name="is_montant_panier"  attrs="{'invisible': [('customer', '!=', True)]}"/>
                     <field name="is_consigne_panier" attrs="{'invisible': [('customer', '!=', True)]}"/>
                 </field>
-
             </field>
         </record>
        <record id="is_view_partner_tree" model="ir.ui.view">
@@ -42,8 +43,10 @@
                     <field name="city"/>
                     <field name="is_code"/>
                     <field name="is_frequence"/>
-                    <field name="is_jour_panier"/>
                     <field name="is_semaine_panier"/>
+                    <field name="is_jour_panier"/>
+                    <field name="is_horaire_panier"/>
+                    <field name="is_montant_panier"/>
                 </field>
             </field>
         </record>
@@ -56,6 +59,9 @@
             <field name="arch" type="xml">
                 <field name="user_id" position="before">
                     <field name="is_code"/>
+                    <field name="is_semaine_panier"/>
+                    <field name="is_jour_panier"/>
+                    <field name="is_horaire_panier"/>
                 </field>
             </field>
         </record>

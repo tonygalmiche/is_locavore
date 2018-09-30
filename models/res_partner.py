@@ -15,16 +15,22 @@ class ResPartner(models.Model):
         ('gauche', 'Gauche'),
         ('droite', 'Droite'),
     ], 'Sens flèche étiquette producteur', default='droite')
+    is_semaine_panier = fields.Selection([
+        ('P', 'Semaines paires'),
+        ('I', 'Semaines impaires'),
+        ('T', 'Toutes les semaines'),
+    ], 'Semaine panier client')
     is_jour_panier = fields.Selection([
         ('2', 'Mardi'),
         ('3', 'Mercredi'),
         ('4', 'Jeudi'),
         ('5', 'Vendredi'),
         ('6', 'Samedi'),
-    ], 'Jour panier client')
-    is_semaine_panier = fields.Selection([
-        ('P', 'Semaines paires'),
-        ('I', 'Semaines impaires'),
-        ('T', 'Toutes les semaines'),
-    ], 'Semaine panier client')
+    ], 'Jour du panier')
+    is_horaire_panier = fields.Selection([
+        ('matin', 'Matin'),
+        ('midi' , 'Midi'),
+        ('soir' , 'Soir'),
+    ], 'Horaire du panier')
+    is_montant_panier = fields.Integer('Montant du panier')
     is_consigne_panier = fields.Text('Consignes du client pour le panier')
