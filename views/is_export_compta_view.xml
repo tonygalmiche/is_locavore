@@ -17,11 +17,12 @@
             <field name="model">is.export.compta.ligne</field>
             <field name="arch" type="xml">
                 <tree editable="top">
-                    <field name="date_facture" />
-                    <field name="compte" />
-                    <field name="libelle" />
-                    <field name="piece" />
-                    <field name="libelle_piece" />
+                    <field name="ligne"/>
+                    <field name="date_facture"/>
+                    <field name="account_id"/>
+                    <field name="libelle"/>
+                    <field name="piece"/>
+                    <field name="libelle_piece"/>
                     <field name="debit"  sum="Total"/>
                     <field name="credit" sum="Total"/>
                 </tree>
@@ -35,14 +36,14 @@
                     <sheet>
                         <group>
                             <group>
-                                <field name="export_compta_id" />
-                                <field name="date_facture" />
-                                <field name="compte" />
-                                <field name="libelle" />
-                                <field name="piece" />
-                                <field name="libelle_piece" />
-                                <field name="debit" />
-                                <field name="credit" />
+                                <field name="export_compta_id"/>
+                                <field name="date_facture"/>
+                                <field name="account_id"/>
+                                <field name="libelle"/>
+                                <field name="piece"/>
+                                <field name="libelle_piece"/>
+                                <field name="debit"/>
+                                <field name="credit"/>
                             </group>
                         </group>
                     </sheet>
@@ -54,13 +55,13 @@
             <field name="model">is.export.compta.ligne</field>
             <field name="arch" type="xml">
                 <search>
-                    <field name="compte"/>
+                    <field name="account_id"/>
                     <field name="libelle"/>
                     <field name="piece"/>
                     <field name="libelle_piece"/>
                     <field name="commentaire" />
                     <group expand="0" string="Regrouper par...">
-                        <filter string="Compte"        context="{'group_by':'compte'}"/>
+                        <filter string="Compte"        context="{'group_by':'account_id'}"/>
                         <filter string="Pièce"         context="{'group_by':'piece'}"/>
                     </group>
                </search>
@@ -97,8 +98,38 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button name="action_export_compta2"             type="object" string="Générer les lignes"/>
-                        <button name="%(is_export_compta_ligne_action)d" type="action" string="Voir les lignes"/>
+                        <button
+                            name="action_export_compta"
+                            type="object"
+                            string="Générer les lignes"
+                            attrs="{'invisible': [('journal', 'not in', ['CAI','HA'])]}"
+                            confirm="Cela va écraser les lignes ?"
+                        />
+
+
+                        <button
+                            name="action_importer_fichier"
+                            type="object"
+                            string="Importer fichier banque"
+                            attrs="{'invisible': [('journal', 'not in', ['BQ'])]}"
+                            confirm="Cela va écraser les lignes ?"
+                        />
+
+                        <button 
+                            name="%(is_export_compta_ligne_action)d"
+                            type="action"
+                            string="Voir les lignes"
+                            attrs="{'invisible': [('ligne_ids', '=', [])]}"
+                        />
+
+                        <button
+                            name="action_generer_fichier"
+                            type="object"
+                            string="Générer fichier à exporter"
+                            attrs="{'invisible': [('journal', 'not in', ['BQ'])]}"
+                        />
+
+
                     </header>
                     <sheet>
                         <group>
@@ -116,6 +147,12 @@
                                 attrs="{'invisible': [('journal', '!=', 'HA')]}" 
                                 domain="[('state', 'not in', ['draft','cancel','paid']),('journal_id', '=', 2)]" 
                             />
+                            <field 
+                                name="file_ids" 
+                                widget="many2many_binary" 
+                                attrs="{'invisible': [('journal', '!=', 'BQ')]}"
+                            />
+                            <field name="ligne_ids" invisible="1"/>
                         </group>
                     </sheet>
                 </form>
