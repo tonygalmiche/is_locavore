@@ -109,6 +109,7 @@ class is_export_compta(models.Model):
                     'date_facture'      : row.date_facture,
                     'account_id'        : account_id,
                     'libelle'           : row.libelle,
+                    'libelle_piece'     : row.libelle_piece,
                     'journal'           : obj.journal,
                     'debit'             : row.credit,
                     'credit'            : row.debit,
