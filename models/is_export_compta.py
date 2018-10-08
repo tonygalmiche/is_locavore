@@ -63,7 +63,7 @@ class is_export_compta(models.Model):
                     if ct>1:
                         lig=row.split(";")
                         if len(lig)>5:
-                            date    = lig[1]
+                            date    = lig[0]
                             debit   = lig[2].replace(',', '.')
                             credit  = lig[3].replace(',', '.')
                             libelle = lig[4]
