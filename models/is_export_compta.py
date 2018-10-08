@@ -79,7 +79,7 @@ class is_export_compta(models.Model):
                                 'export_compta_id'  : obj.id,
                                 'ligne'             : (ct-1),
                                 'date_facture'      : date,
-                                'libelle'           : libelle,
+                                'libelle_piece'     : libelle,
                                 'journal'           : obj.journal,
                                 'debit'             : debit,
                                 'credit'            : credit,
