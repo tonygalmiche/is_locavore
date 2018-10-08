@@ -66,7 +66,7 @@ class is_export_compta(models.Model):
                             date    = lig[0]
                             debit   = lig[2].replace(',', '.')
                             credit  = lig[3].replace(',', '.')
-                            libelle = lig[4]
+                            libelle = lig[4][0:29]
                             try:
                                 debit = -float(debit)
                             except ValueError:
