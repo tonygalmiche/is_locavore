@@ -39,7 +39,7 @@ class PosOrder(models.Model):
 
     is_annee     = fields.Char(string='Année de la commande', compute='_compute', readonly=True, store=True)
     is_mois      = fields.Char(string='Mois de la commande' , compute='_compute', readonly=True, store=True)
-    is_total     = fields.Float(string='Total' , compute='_compute_total', readonly=True, store=True)
+    is_total     = fields.Float(string='Total TTC' , compute='_compute_total', readonly=True, store=True)
     is_paiement  = fields.Char(string='Paiement', compute='_compute_paiement', readonly=True, store=True)
 
 

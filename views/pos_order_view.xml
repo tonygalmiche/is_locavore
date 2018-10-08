@@ -29,7 +29,7 @@
                     <field name="is_annee"/>
                     <field name="is_mois"/>
                     <field name="is_total"     sum="Total" widget="monetary"/>
-                    <field name="amount_total" sum="Total" widget="monetary"/>
+                    <!--<field name="amount_total" sum="Total" widget="monetary"/>-->
                     <field name="is_paiement"/>
                     <field name="company_id" groups="base.group_multi_company"/>
                     <field name="state"/>

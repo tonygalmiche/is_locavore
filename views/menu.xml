@@ -3,23 +3,55 @@
 <odoo>
     <data>
 
+
+
+        <!-- Statistiques -->
+        <menuitem 
+            id="is_pos_order_statistique_menu"
+            sequence="95"
+            name="Statistiques"
+            parent="point_of_sale.menu_point_root"
+        />
+
+        <!-- Ticket moyen -->
+        <menuitem 
+            id="is_ticket_moyen_menu"
+            sequence="10"
+            name="Ticket moyen"
+            parent="is_pos_order_statistique_menu"
+            action="is_ticket_moyen_action"
+        />
+        <menuitem 
+            id="is_ticket_moyen_mois_menu"
+            sequence="20"
+            name="Ticket moyen par mois"
+            parent="is_pos_order_statistique_menu"
+            action="is_ticket_moyen_mois_action"
+        />
+
+
+
         <!-- Ecritures comptables -->
         <menuitem 
             id="is_account_move_line_menu"
-            sequence="20"
+            sequence="30"
             name="Ecritures comptables"
-            parent="point_of_sale.menu_point_rep"
+            parent="is_pos_order_statistique_menu"
             action="is_account_move_line_action"
         />
 
         <!-- Lignes des tickets -->
         <menuitem 
             id="is_pos_order_line_menu"
-            sequence="30"
+            sequence="40"
             name="Lignes des tickets"
-            parent="point_of_sale.menu_point_rep"
+            parent="is_pos_order_statistique_menu"
             action="is_pos_order_line_action"
         />
+
+
+
+
 
 
         <!-- Préparation de commandes -->
