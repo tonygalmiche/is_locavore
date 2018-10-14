@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="is_ticket_heure_tree" model="ir.ui.view">
+            <field name="name">is.ticket.heure.tree</field>
+            <field name="model">is.ticket.heure</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="date_order"/>
+                    <field name="annee"/>
+                    <field name="mois"/>
+                    <field name="heure"/>
+                    <field name="jour_semaine"/>
+                    <field name="nb_tickets"/>
+                </tree>
+            </field>
+        </record>
+        <record id="is_ticket_heure_form" model="ir.ui.view">
+            <field name="name">is.ticket.heure.form</field>
+            <field name="model">is.ticket.heure</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="date_order"/>
+                                <field name="annee"/>
+                                <field name="mois"/>
+                                <field name="heure"/>
+                                <field name="jour_semaine"/>
+                                <field name="nb_tickets"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="is_ticket_heure_search" model="ir.ui.view">
+            <field name="name">is.ticket.heure.search</field>
+            <field name="model">is.ticket.heure</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="date_order"/>
+                    <field name="annee"/>
+                    <field name="mois"/>
+                    <field name="heure"/>
+                    <field name="jour_semaine"/>
+                </search>
+            </field>
+        </record>
+        <record id="is_ticket_heure_pivot" model="ir.ui.view">
+            <field name="name">is_ticket_heure_pivot</field>
+            <field name="model">is.ticket.heure</field>
+            <field name="arch" type="xml">
+                <pivot string="Lignes des tickets">
+                    <field name="heure"      type="row"/>
+                    <field name="annee"      type="col"/>
+                    <field name="nb_tickets" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+        <record id="is_ticket_heure_graph" model="ir.ui.view">
+            <field name="name">is_ticket_heure_graph</field>
+            <field name="model">is.ticket.heure</field>
+            <field name="arch" type="xml">
+                <graph string="Lignes des tickets" type="bar" orientation="vertical" stacked="False">
+                    <field name="heure"      type="row"/>
+                    <field name="annee"      type="col"/>
+                    <field name="nb_tickets" type="measure"/>
+                </graph>
+            </field>
+        </record>
+        <record  id="is_ticket_heure_action" model="ir.actions.act_window">
+            <field name="name">Nb tickets par heure</field>
+            <field name="res_model">is.ticket.heure</field>
+            <field name="view_type">form</field>
+            <field name="limit">200</field>
+            <field name="view_mode">graph,pivot,tree,form</field>
+            <field name="context">{}</field>
+        </record>
+    </data>
+</openerp>

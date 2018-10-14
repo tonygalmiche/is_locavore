@@ -29,6 +29,15 @@
             action="is_ticket_moyen_mois_action"
         />
 
+        <menuitem 
+            id="is_ticket_heure_menu"
+            sequence="25"
+            name="Tickets par heure"
+            parent="is_pos_order_statistique_menu"
+            action="is_ticket_heure_action"
+        />
+
+
 
 
         <!-- Ecritures comptables -->

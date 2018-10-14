@@ -219,56 +219,70 @@ class is_export_compta(models.Model):
 
 
     def generer_fichier(self):
-        for obj in self:
-            model='is.export.compta'
-            attachments = self.env['ir.attachment'].search([('res_model','=',model),('res_id','=',obj.id)])
-            attachments.unlink()
-            name='export-compta.txt'
-            dest     = '/tmp/'+name
-            f = codecs.open(dest,'wb',encoding='utf-8')
+        cr=self._cr
 
-            f.write('##Transfert\r\n')
-            f.write('##Section\tDos\r\n')
-            f.write('EUR\r\n')
-            f.write('##Section\tMvt\r\n')
-            for row in obj.ligne_ids:
-                compte=str(row.account_id.code or '')
-                debit=row.debit
-                credit=row.debit
-                if row.credit>0.0:
-                    montant=row.credit  
-                    sens='C'
-                else:
-                    montant=row.debit  
-                    sens='D'
-                montant='%0.2f' % montant
-                date=row.date_facture
-                date=datetime.datetime.strptime(date, '%Y-%m-%d')
-                date=date.strftime('%d/%m/%Y')
-                f.write('"'+obj.name+'"\t')
-                f.write('"'+obj.journal+'"\t')
-                f.write('"'+date+'"\t')
-                f.write('"'+compte+'"\t')
-                f.write('"'+row.libelle[0:34]+'"\t')
-                f.write('"'+montant+'"\t')
-                f.write(sens+'\t')
-                f.write('B\t')
-                f.write('"'+(row.libelle_piece[0:34] or '')+'"\t')
-                f.write('"'+(row.piece or '')+'"\t')
-                f.write('\r\n')
-            f.write('##Section\tJnl\r\n')
-            f.write('"CAI"\t"Caisse"\t"T"\r\n')
-            f.close()
-            r = open(dest,'rb').read().encode('base64')
-            vals = {
-                'name':        name,
-                'datas_fname': name,
-                'type':        'binary',
-                'res_model':   model,
-                'res_id':      obj.id,
-                'datas':       r,
-            }
-            id = self.env['ir.attachment'].create(vals)
+
+        for obj in self:
+
+            sql="""
+                SELECT to_char(date_facture,'YYYY-MM')
+                FROM is_export_compta_ligne
+                WHERE export_compta_id="""+str(obj.id)+"""
+                GROUP BY to_char(date_facture,'YYYY-MM')
+                ORDER BY to_char(date_facture,'YYYY-MM')
+            """
+            cr.execute(sql)
+            for row in cr.fetchall():
+                mois=row[0]
+                name='export-compta-'+mois+'.txt'
+                model='is.export.compta'
+                attachments = self.env['ir.attachment'].search([('res_model','=',model),('res_id','=',obj.id),('name','=',name)])
+                attachments.unlink()
+                dest     = '/tmp/'+name
+                f = codecs.open(dest,'wb',encoding='utf-8')
+                f.write('##Transfert\r\n')
+                f.write('##Section\tDos\r\n')
+                f.write('EUR\r\n')
+                f.write('##Section\tMvt\r\n')
+                for row in obj.ligne_ids:
+                    if row.date_facture[0:7]==mois:
+                        compte=str(row.account_id.code or '')
+                        debit=row.debit
+                        credit=row.debit
+                        if row.credit>0.0:
+                            montant=row.credit  
+                            sens='C'
+                        else:
+                            montant=row.debit  
+                            sens='D'
+                        montant='%0.2f' % montant
+                        date=row.date_facture
+                        date=datetime.datetime.strptime(date, '%Y-%m-%d')
+                        date=date.strftime('%d/%m/%Y')
+                        f.write('"'+obj.name+'"\t')
+                        f.write('"'+obj.journal+'"\t')
+                        f.write('"'+date+'"\t')
+                        f.write('"'+compte+'"\t')
+                        f.write('"'+row.libelle[0:34]+'"\t')
+                        f.write('"'+montant+'"\t')
+                        f.write(sens+'\t')
+                        f.write('B\t')
+                        f.write('"'+(row.libelle_piece[0:34] or '')+'"\t')
+                        f.write('"'+(row.piece or '')+'"\t')
+                        f.write('\r\n')
+                f.write('##Section\tJnl\r\n')
+                f.write('"CAI"\t"Caisse"\t"T"\r\n')
+                f.close()
+                r = open(dest,'rb').read().encode('base64')
+                vals = {
+                    'name':        name,
+                    'datas_fname': name,
+                    'type':        'binary',
+                    'res_model':   model,
+                    'res_id':      obj.id,
+                    'datas':       r,
+                }
+                id = self.env['ir.attachment'].create(vals)
 
 
 
