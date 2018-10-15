@@ -80,13 +80,25 @@
                 </pivot>
             </field>
         </record>
+        <record id="is_pos_order_line_graph" model="ir.ui.view">
+            <field name="name">is_pos_order_line_graph</field>
+            <field name="model">is.pos.order.line</field>
+            <field name="arch" type="xml">
+                <graph string="Lignes des tickets">
+                    <field name="is_parent_pos_categ_id" type="row"/>
+                    <field name="date_order"             type="col" interval="day"/>
+                    <field name="montant"                type="measure"/>
+                </graph>
+            </field>
+        </record>
+
 
         <record  id="is_pos_order_line_action" model="ir.actions.act_window">
             <field name="name">Lignes des tickets</field>
             <field name="res_model">is.pos.order.line</field>
             <field name="view_type">form</field>
             <field name="limit">200</field>
-            <field name="view_mode">pivot,tree,form</field>
+            <field name="view_mode">pivot,graph,tree,form</field>
             <field name="context">{'search_default_10jours':1}</field>
         </record>
     </data>

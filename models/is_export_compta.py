@@ -6,6 +6,7 @@ from openerp.exceptions import Warning
 import codecs
 import unicodedata
 import base64
+import csv, cStringIO
 
 
 def s(txt):
@@ -24,6 +25,7 @@ class is_export_compta(models.Model):
         ('CAI', 'Caisse'),
         ('HA' , 'Achats'),
         ('BQ' , 'Banque'),
+        ('OD' , 'OD'),
     ], 'Journal', default='CAI')
     date_debut         = fields.Date("Date de début")
     date_fin           = fields.Date("Date de fin")
@@ -51,43 +53,87 @@ class is_export_compta(models.Model):
         cr=self._cr
         for obj in self:
             obj.ligne_ids.unlink()
-            for attachment in obj.file_ids:
-                attachment=base64.decodestring(attachment.datas)
-                #conversion d'ISO-8859-1/latin1 en UTF-8
-                attachment=attachment.decode('iso-8859-1').encode('utf8')
-                csvfile=attachment.split("\r\n")
-                tab=[]
-                ct=0
-                for row in csvfile:
-                    ct=ct+1
-                    if ct>1:
-                        lig=row.split(";")
-                        if len(lig)>5:
-                            date    = lig[0]
-                            debit   = lig[2].replace(',', '.')
-                            credit  = lig[3].replace(',', '.')
-                            libelle = lig[4][0:29]
+            if obj.journal=='BQ':
+                for attachment in obj.file_ids:
+                    attachment=base64.decodestring(attachment.datas)
+                    #conversion d'ISO-8859-1/latin1 en UTF-8
+                    attachment=attachment.decode('iso-8859-1').encode('utf8')
+                    csvfile=attachment.split("\r\n")
+                    tab=[]
+                    ct=0
+                    for row in csvfile:
+                        ct=ct+1
+                        if ct>1:
+                            lig=row.split(";")
+                            if len(lig)>5:
+                                date    = lig[0]
+                                debit   = lig[2].replace(',', '.')
+                                credit  = lig[3].replace(',', '.')
+                                libelle = lig[4][0:29]
+                                try:
+                                    debit = -float(debit)
+                                except ValueError:
+                                    debit=0
+                                try:
+                                    credit = float(credit)
+                                except ValueError:
+                                    credit=0
+                                vals={
+                                    'export_compta_id'  : obj.id,
+                                    'ligne'             : (ct-1),
+                                    'date_facture'      : date,
+                                    'libelle'           : libelle,
+                                    'libelle_piece'     : libelle,
+                                    'journal'           : obj.journal,
+                                    'debit'             : debit,
+                                    'credit'            : credit,
+                                    'devise'            : u'EUR',
+                                }
+                                self.env['is.export.compta.ligne'].create(vals)
+                self.generer_fichier()
+            if obj.journal=='OD':
+                for attachment in obj.file_ids:
+                    attachment=base64.decodestring(attachment.datas)
+                    csvfile=attachment.split("\n")
+
+                    csvfile = attachment.split("\n")
+                    csvfile = csv.reader(csvfile, delimiter=',')
+                    for lig, row in enumerate(csvfile):
+                        if lig>0 and len(row)>1:
+                            ligne        = row[0]
+                            date_facture = row[1]
+                            compte       = row[2]
+                            accounts   = self.env['account.account'].search([('code','=',compte)])
+                            account_id=False
+                            if len(accounts):
+                                account_id=accounts[0].id
+                            libelle_piece = row[3]
+                            libelle       = row[4]
+
+                            debit = row[5].replace(',', '.').replace(' ', '')
                             try:
-                                debit = -float(debit)
+                                debit = float(debit)
                             except ValueError:
                                 debit=0
+
+                            credit  = row[6].replace(',', '.').replace(' ', '')
                             try:
                                 credit = float(credit)
                             except ValueError:
                                 credit=0
                             vals={
                                 'export_compta_id'  : obj.id,
-                                'ligne'             : (ct-1),
-                                'date_facture'      : date,
+                                'ligne'             : ligne,
+                                'date_facture'      : date_facture,
+                                'account_id'        : account_id,
                                 'libelle'           : libelle,
-                                'libelle_piece'     : libelle,
+                                'libelle_piece'     : libelle_piece,
                                 'journal'           : obj.journal,
                                 'debit'             : debit,
                                 'credit'            : credit,
                                 'devise'            : u'EUR',
                             }
                             self.env['is.export.compta.ligne'].create(vals)
-            self.generer_fichier()
 
 
     @api.multi

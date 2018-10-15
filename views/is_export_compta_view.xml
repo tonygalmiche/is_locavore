@@ -110,8 +110,8 @@
                         <button
                             name="action_importer_fichier"
                             type="object"
-                            string="Importer fichier banque"
-                            attrs="{'invisible': [('journal', 'not in', ['BQ'])]}"
+                            string="Importer fichier banque ou des OD"
+                            attrs="{'invisible': [('journal', 'not in', ['BQ','OD'])]}"
                             confirm="Cela va écraser les lignes ?"
                         />
 
@@ -126,7 +126,7 @@
                             name="action_generer_fichier"
                             type="object"
                             string="Générer fichier à exporter"
-                            attrs="{'invisible': [('journal', 'not in', ['BQ'])]}"
+                            attrs="{'invisible': [('journal', 'not in', ['BQ','OD'])]}"
                         />
 
 
@@ -150,7 +150,7 @@
                             <field 
                                 name="file_ids" 
                                 widget="many2many_binary" 
-                                attrs="{'invisible': [('journal', '!=', 'BQ')]}"
+                                attrs="{'invisible': [('journal', 'not in', ['BQ','OD'])]}"
                             />
                             <field name="ligne_ids" invisible="1"/>
                         </group>
