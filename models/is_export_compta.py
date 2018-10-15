@@ -127,7 +127,7 @@ class is_export_compta(models.Model):
                                 'account_id'        : account_id,
                                 'libelle'           : libelle,
                                 'piece'             : piece,
-                                'libelle_piece'     : libelle_piece,
+                                'libelle_piece'     : piece,
                                 'journal'           : obj.journal,
                                 'debit'             : debit,
                                 'credit'            : credit,
