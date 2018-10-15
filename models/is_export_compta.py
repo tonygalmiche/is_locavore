@@ -95,7 +95,6 @@ class is_export_compta(models.Model):
                 for attachment in obj.file_ids:
                     attachment=base64.decodestring(attachment.datas)
                     csvfile=attachment.split("\n")
-
                     csvfile = attachment.split("\n")
                     csvfile = csv.reader(csvfile, delimiter=',')
                     for lig, row in enumerate(csvfile):
@@ -136,6 +135,7 @@ class is_export_compta(models.Model):
                             self.env['is.export.compta.ligne'].create(vals)
 
 
+
     @api.multi
     def action_generer_fichier(self):
         for obj in self:
@@ -146,22 +146,23 @@ class is_export_compta(models.Model):
             if ct:
                 raise Warning('Compte non renseigné sur '+str(ct)+' lignes')
             #** Ajout des lignes en 512000
-            account_id = self.env['account.account'].search([('code','=','512000')])[0].id
-            self.env['is.export.compta.ligne'].search([('export_compta_id','=',obj.id),('account_id','=',account_id)]).unlink()
-            for row in obj.ligne_ids:
-                vals={
-                    'export_compta_id'  : obj.id,
-                    'ligne'             : row.ligne,
-                    'date_facture'      : row.date_facture,
-                    'account_id'        : account_id,
-                    'libelle'           : row.libelle,
-                    'libelle_piece'     : row.libelle_piece,
-                    'journal'           : obj.journal,
-                    'debit'             : row.credit,
-                    'credit'            : row.debit,
-                    'devise'            : u'EUR',
-                }
-                self.env['is.export.compta.ligne'].create(vals)
+            if obj.journal=='BQ':
+                account_id = self.env['account.account'].search([('code','=','512000')])[0].id
+                self.env['is.export.compta.ligne'].search([('export_compta_id','=',obj.id),('account_id','=',account_id)]).unlink()
+                for row in obj.ligne_ids:
+                    vals={
+                        'export_compta_id'  : obj.id,
+                        'ligne'             : row.ligne,
+                        'date_facture'      : row.date_facture,
+                        'account_id'        : account_id,
+                        'libelle'           : row.libelle,
+                        'libelle_piece'     : row.libelle_piece,
+                        'journal'           : obj.journal,
+                        'debit'             : row.credit,
+                        'credit'            : row.debit,
+                        'devise'            : u'EUR',
+                    }
+                    self.env['is.export.compta.ligne'].create(vals)
             self.generer_fichier()
 
 
