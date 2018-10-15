@@ -106,7 +106,7 @@ class is_export_compta(models.Model):
                             account_id=False
                             if len(accounts):
                                 account_id=accounts[0].id
-                            libelle_piece = row[3]
+                            piece         = row[3]
                             libelle       = row[4]
 
                             debit = row[5].replace(',', '.').replace(' ', '')
@@ -126,7 +126,7 @@ class is_export_compta(models.Model):
                                 'date_facture'      : date_facture,
                                 'account_id'        : account_id,
                                 'libelle'           : libelle,
-                                'libelle_piece'     : libelle_piece,
+                                'piece'             : piece,
                                 'journal'           : obj.journal,
                                 'debit'             : debit,
                                 'credit'            : credit,
