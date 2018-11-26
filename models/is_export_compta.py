@@ -20,18 +20,18 @@ class is_export_compta(models.Model):
     _name='is.export.compta'
     _order='name desc'
 
-    name               = fields.Char("N°Folio"      , readonly=True)
+    name               = fields.Char(u"N°Folio"      , readonly=True)
     journal = fields.Selection([
         ('CAI', 'Caisse'),
         ('HA' , 'Achats'),
         ('BQ' , 'Banque'),
         ('OD' , 'OD'),
     ], 'Journal', default='CAI')
-    date_debut         = fields.Date("Date de début")
-    date_fin           = fields.Date("Date de fin")
-    facture_debut_id   = fields.Many2one('account.invoice', "Facture début")
-    facture_fin_id     = fields.Many2one('account.invoice', "Facture fin")
-    file_ids           = fields.Many2many('ir.attachment', 'is_export_compta_attachment_rel', 'doc_id', 'file_id', 'Fichier à importer')
+    date_debut         = fields.Date(u"Date de début")
+    date_fin           = fields.Date(u"Date de fin")
+    facture_debut_id   = fields.Many2one('account.invoice', u"Facture début")
+    facture_fin_id     = fields.Many2one('account.invoice', u"Facture fin")
+    file_ids           = fields.Many2many('ir.attachment', 'is_export_compta_attachment_rel', 'doc_id', 'file_id', u'Fichier à importer')
     ligne_ids          = fields.One2many('is.export.compta.ligne', 'export_compta_id', u'Lignes')
     _defaults = {
     }

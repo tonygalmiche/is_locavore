@@ -99,7 +99,7 @@
         parent="point_of_sale.menu_point_of_sale" sequence="3"/>
 
 
-
+<!--
     <record id="is_product_template_compta_tree_view" model="ir.ui.view">
         <field name="name">is_product_template_compta_tree_view</field>
         <field name="model">product.template</field>
@@ -124,7 +124,7 @@
         <field name="view_mode">tree,kanban,form</field>
         <field name="context" eval="{'search_default_filter_to_availabe_pos': 1}"/>
         <field name="domain" eval="[]"/>
-        <field name="search_view_id" eval="False"/> <!-- Force empty -->
+        <field name="search_view_id" eval="False"/> 
         <field name="view_id" eval="is_product_template_compta_tree_view"/>
     </record>
     <menuitem
@@ -132,7 +132,7 @@
         id="is_product_template_compta_menu"
         action="is_product_template_compta_action"
         parent="point_of_sale.menu_point_of_sale" sequence="4"/>
-
+-->
 
 
 </odoo>

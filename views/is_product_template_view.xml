@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="is_product_template_compta_tree" model="ir.ui.view">
+            <field name="name">is.product.template.tree</field>
+            <field name="model">is.product.template</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="product_id"/>
+                    <field name="available_in_pos"/>
+                    <field name="account_income_id"/>
+                    <field name="taxe_id"/>
+                    <field name="account_expense_id"/>
+                    <field name="supplier_taxe_id"/>
+                    <field name="nb_taxes"/>
+                    <field name="nb_supplier_taxes"/>
+                </tree>
+            </field>
+        </record>
+        <record id="is_product_template_compta_form" model="ir.ui.view">
+            <field name="name">is.product.template.form</field>
+            <field name="model">is.product.template</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="product_id"/>
+                                <field name="available_in_pos"/>
+                                <field name="account_income_id"/>
+                                <field name="taxe_id"/>
+                                <field name="account_expense_id"/>
+                                <field name="supplier_taxe_id"/>
+                                <field name="nb_taxes"/>
+                                <field name="nb_supplier_taxes"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="is_product_template_compta_search" model="ir.ui.view">
+            <field name="name">is.product.template.search</field>
+            <field name="model">is.product.template</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="product_id"/>
+                    <field name="available_in_pos"/>
+                    <field name="account_income_id"/>
+                    <field name="taxe_id"/>
+                    <field name="account_expense_id"/>
+                    <field name="supplier_taxe_id"/>
+                    <field name="nb_taxes"/>
+                    <field name="nb_supplier_taxes"/>
+               </search>
+            </field>
+        </record>
+        <record  id="is_product_template_compta_action" model="ir.actions.act_window">
+            <field name="name">Articles (Compta)</field>
+            <field name="res_model">is.product.template</field>
+            <field name="view_type">form</field>
+            <field name="limit">2000</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+        <menuitem
+            name="Articles (Compta)"
+            id="is_product_template_compta_menu"
+            action="is_product_template_compta_action"
+            parent="point_of_sale.menu_point_of_sale" sequence="4"/>
+
+
+
+    </data>
+</openerp>

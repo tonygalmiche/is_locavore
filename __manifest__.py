@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 {
-    'name'     : 'InfoSaône - Epicerie Locavore des Bourroches',
+    'name'     : u'InfoSaône - Epicerie Locavore des Bourroches',
     'version'  : '0.1',
-    'author'   : 'InfoSaône',
-    'category' : 'InfoSaône/iCom',
+    'author'   : u'InfoSaône',
+    'category' : u'InfoSaône',
 
 
-    'description': """
+    u'description': """
 InfoSaône - Epicerie Locavore des Bourroches
 ===================================================
 """,
-    'maintainer' : 'InfoSaône',
+    u'maintainer' : 'InfoSaône',
     'website'    : 'http://www.infosaone.com',
     'depends'    : [
         'base',
@@ -41,6 +41,7 @@ InfoSaône - Epicerie Locavore des Bourroches
         'views/is_pos_order_line_view.xml',
         'views/is_preparation_commande_view.xml',
         'views/is_imprime_etiquette_view.xml',
+        'views/is_product_template_view.xml',
         'views/account_view.xml',
         'views/is_export_compta_view.xml',
         'views/is_ticket_moyen_view.xml',
