@@ -239,6 +239,7 @@ class IsPreparationCommandeFournisseur(models.Model):
     @api.multi
     def creation_commande_action(self):
         for obj in self:
+            date_planned=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             partner=obj.partner_id
             vals={
                 'partner_id'      : partner.id,
@@ -268,7 +269,7 @@ class IsPreparationCommandeFournisseur(models.Model):
                         'product_uom' : line.uom_po_id.id ,
                         'price_unit'  : line.prix_achat,
                         'product_qty' : line.qt_suggeree,
-                        'date_planned': '2018-01-01',
+                        'date_planned': date_planned,
                         'taxes_id'    : [(6,0,taxe_ids)],
                     }
                     line=order_line_obj.create(vals)
