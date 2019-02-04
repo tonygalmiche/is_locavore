@@ -11,10 +11,10 @@ class is_product_template(models.Model):
     _auto = False
 
 
-    product_id         = fields.Many2one('product.template', 'Article')
-    account_income_id  = fields.Many2one('account.account', 'Compte de revenus')
+    product_id         = fields.Many2one('product.template', u'Article')
+    account_income_id  = fields.Many2one('account.account', u'Compte de revenus')
     taxe_id            = fields.Many2one('account.tax', u'Taxe à la vente')
-    account_expense_id = fields.Many2one('account.account', 'Compte de dépenses')
+    account_expense_id = fields.Many2one('account.account', u'Compte de dépenses')
     supplier_taxe_id   = fields.Many2one('account.tax', u'Taxe fournisseur')
     nb_taxes           = fields.Integer(u'Nb taxes à la vente')
     nb_supplier_taxes  = fields.Integer(u'Nb taxes fournisseur')

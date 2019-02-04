@@ -12,4 +12,6 @@ access_is_product_template,access_is_product_template,model_is_product_template,
 access_is_ticket_moyen,access_is_ticket_moyen,model_is_ticket_moyen,base.group_user,1,0,0,0
 access_is_ticket_moyen_mois,access_is_ticket_moyen_mois,model_is_ticket_moyen_mois,base.group_user,1,0,0,0
 access_is_ticket_heure,access_is_ticket_heure,model_is_ticket_heure,base.group_user,1,0,0,0
+access_is_analyse_taux_marge,access_is_analyse_taux_marge,model_is_analyse_taux_marge,base.group_user,1,0,0,0
+access_is_analyse_taux_marge_line,access_is_analyse_taux_marge_line,model_is_analyse_taux_marge_line,base.group_user,1,0,0,0
 

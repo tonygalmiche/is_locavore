@@ -37,14 +37,14 @@ class PosOrder(models.Model):
             obj.is_paiement=', '.join(paiements)
 
 
-    is_annee     = fields.Char(string='Année de la commande', compute='_compute', readonly=True, store=True)
-    is_mois      = fields.Char(string='Mois de la commande' , compute='_compute', readonly=True, store=True)
-    is_total     = fields.Float(string='Total TTC' , compute='_compute_total', readonly=True, store=True)
-    is_paiement  = fields.Char(string='Paiement', compute='_compute_paiement', readonly=True, store=True)
+    is_annee     = fields.Char(string=u'Année de la commande', compute='_compute', readonly=True, store=True)
+    is_mois      = fields.Char(string=u'Mois de la commande' , compute='_compute', readonly=True, store=True)
+    is_total     = fields.Float(string=u'Total TTC' , compute='_compute_total', readonly=True, store=True)
+    is_paiement  = fields.Char(string=u'Paiement', compute='_compute_paiement', readonly=True, store=True)
 
 
 class PosOrderLine(models.Model):
     _inherit = "pos.order.line"
 
 
-    order_id = fields.Many2one('pos.order', string='Les lignes', ondelete='cascade', index=True)
+    order_id = fields.Many2one('pos.order', string=u'Les lignes', ondelete='cascade', index=True)

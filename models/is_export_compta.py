@@ -339,18 +339,18 @@ class is_export_compta_ligne(models.Model):
     _description = u"Lignes d'export en compta"
     _order='ligne,id'
 
-    export_compta_id = fields.Many2one('is.export.compta', 'Export Compta', required=True, ondelete='cascade')
-    ligne            = fields.Integer("Ligne")
-    date_facture     = fields.Date("Date")
-    journal          = fields.Char("Journal")
-    account_id       = fields.Many2one('account.account', "N°Compte")
-    libelle          = fields.Char("Libellé Compte")
-    piece            = fields.Char("Pièce")
-    libelle_piece    = fields.Char("Libellé Piece")
-    debit            = fields.Float("Débit")
-    credit           = fields.Float("Crédit")
-    devise           = fields.Char("Devise")
-    commentaire      = fields.Char("Commentaire")
+    export_compta_id = fields.Many2one('is.export.compta', u'Export Compta', required=True, ondelete='cascade')
+    ligne            = fields.Integer(u"Ligne")
+    date_facture     = fields.Date(u"Date")
+    journal          = fields.Char(u"Journal")
+    account_id       = fields.Many2one('account.account', u"N°Compte")
+    libelle          = fields.Char(u"Libellé Compte")
+    piece            = fields.Char(u"Pièce")
+    libelle_piece    = fields.Char(u"Libellé Piece")
+    debit            = fields.Float(u"Débit")
+    credit           = fields.Float(u"Crédit")
+    devise           = fields.Char(u"Devise")
+    commentaire      = fields.Char(u"Commentaire")
 
     _defaults = {
         'journal': 'VTE',

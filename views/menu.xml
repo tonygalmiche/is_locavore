@@ -4,6 +4,27 @@
     <data>
 
 
+        <!-- Analyses -->
+        <menuitem 
+            id="is_analyse_main_menu"
+            sequence="90"
+            name="Analyses"
+        />
+        <menuitem 
+            id="is_analyse_menu"
+            sequence="10"
+            name="Analyses"
+            parent="is_analyse_main_menu"
+        />
+        <menuitem 
+            id="is_analyse_taux_marge_menu"
+            sequence="10"
+            name="Analyse du taux de marge"
+            parent="is_analyse_menu"
+            action="is_analyse_taux_marge_action"
+        />
+
+
 
         <!-- Statistiques -->
         <menuitem 

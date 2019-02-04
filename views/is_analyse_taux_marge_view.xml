@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="is_analyse_taux_marge_form_view">
+            <field name="name">is_analyse_taux_marge_form_view</field>
+            <field name="model">is.analyse.taux.marge</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Form">
+                    <header>
+                        <button name="lancer_analyse_action" type="object" string="Lancer l'analyse"/>
+                        <button name="voir_lignes_action"    type="object" string="Voir les lignes"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="date_debut"/>
+                                <field name="date_fin"/>
+                                <!--<field name="pos_categ_id"/>-->
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="is_analyse_taux_marge_tree_view">
+            <field name="name">is_analyse_taux_marge_tree_view</field>
+            <field name="model">is.analyse.taux.marge</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="date_debut"/>
+                    <field name="date_fin"/>
+                    <!--<field name="pos_categ_id"/>-->
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="is_analyse_taux_marge_search_view" >
+            <field name="name">is_analyse_taux_marge_search_view</field>
+            <field name="model">is.analyse.taux.marge</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <!--<field name="pos_categ_id"/>-->
+                </search>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="is_analyse_taux_marge_action">
+            <field name="name">Analyse du taux de marge</field>
+            <field name="res_model">is.analyse.taux.marge</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <!-- Lignes -->
+        <record model="ir.ui.view" id="is_analyse_taux_marge_line_form_view">
+            <field name="name">is_analyse_taux_marge_line_form_view</field>
+            <field name="model">is.analyse.taux.marge.line</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Form">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="product_id"/>
+                                <field name="uom_po_id"/>
+                                <field name="pos_categ_id"/>
+                                <field name="parent_pos_categ_id"/>
+                                <field name="ca_achat"/>
+                                <field name="ca_vente"/>
+                                <field name="taux_marge_article"/>
+                                <field name="taux_marge"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="is_analyse_taux_marge_line_tree_view">
+            <field name="name">is_analyse_taux_marge_line_tree_view</field>
+            <field name="model">is.analyse.taux.marge.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree editable="top">
+                    <field name="product_id"  widget="many2one_clickable"/>
+                    <field name="uom_po_id"/>
+                    <field name="parent_pos_categ_id"/>
+                    <field name="pos_categ_id"/>
+                    <field name="ca_achat" sum="Total"/>
+                    <field name="ca_vente" sum="Total"/>
+                    <field name="taux_marge_article"/>
+                    <field name="taux_marge"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="is_analyse_taux_marge_line_search_view" >
+            <field name="name">is_analyse_taux_marge_line_search_view</field>
+            <field name="model">is.analyse.taux.marge.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="product_id"/>
+                    <field name="parent_pos_categ_id"/>
+                    <field name="pos_categ_id"/>
+                </search>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="is_analyse_taux_marge_line_action">
+            <field name="name">Analyse du taux de marge</field>
+            <field name="res_model">is.analyse.taux.marge.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>

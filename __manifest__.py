@@ -6,11 +6,11 @@
     'category' : u'InfoSaône',
 
 
-    u'description': """
+    'description': u"""
 InfoSaône - Epicerie Locavore des Bourroches
 ===================================================
 """,
-    u'maintainer' : 'InfoSaône',
+    'maintainer' : u'InfoSaône',
     'website'    : 'http://www.infosaone.com',
     'depends'    : [
         'base',
@@ -46,6 +46,7 @@ InfoSaône - Epicerie Locavore des Bourroches
         'views/is_export_compta_view.xml',
         'views/is_ticket_moyen_view.xml',
         'views/is_ticket_heure_view.xml',
+        'views/is_analyse_taux_marge_view.xml',
         'views/menu.xml',
         'report/layouts.xml',
         'report/purchase_order_templates.xml',

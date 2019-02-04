@@ -10,17 +10,17 @@ class IsTicketMoyen(models.Model):
     _order='date desc'
     _auto=False
 
-    date_order   = fields.Date('Date du ticket')
-    annee        = fields.Char('Année')
-    mois         = fields.Char('Mois')
-    jour_an      = fields.Char("Jour dans l'année")
-    jour_mois    = fields.Char('Jour du mois')
-    jour_semaine = fields.Char('Jour dans semaine')
-    semaine      = fields.Char('Semaine')
-    session_id   = fields.Many2one('pos.session', 'Session')
-    total_ttc    = fields.Float('Total TTC'   , digits=(14,2))
-    nb_tickets   = fields.Integer('Nb tickets')
-    ticket_moyen = fields.Float('Ticket moyen', digits=(14,2))
+    date_order   = fields.Date(u'Date du ticket')
+    annee        = fields.Char(u'Année')
+    mois         = fields.Char(u'Mois')
+    jour_an      = fields.Char(u"Jour dans l'année")
+    jour_mois    = fields.Char(u'Jour du mois')
+    jour_semaine = fields.Char(u'Jour dans semaine')
+    semaine      = fields.Char(u'Semaine')
+    session_id   = fields.Many2one(u'pos.session', 'Session')
+    total_ttc    = fields.Float(u'Total TTC'   , digits=(14,2))
+    nb_tickets   = fields.Integer(u'Nb tickets')
+    ticket_moyen = fields.Float(u'Ticket moyen', digits=(14,2))
 
     def init(self):
         cr , uid, context = self.env.args
@@ -60,11 +60,11 @@ class IsTicketMoyenMois(models.Model):
     _order='annee desc, mois desc'
     _auto=False
 
-    annee        = fields.Char('Année')
-    mois         = fields.Char('Mois')
-    total_ttc    = fields.Float('Total TTC'   , digits=(14,2))
-    nb_tickets   = fields.Integer('Nb tickets')
-    ticket_moyen = fields.Float('Ticket moyen', digits=(14,2))
+    annee        = fields.Char(u'Année')
+    mois         = fields.Char(u'Mois')
+    total_ttc    = fields.Float(u'Total TTC'   , digits=(14,2))
+    nb_tickets   = fields.Integer(u'Nb tickets')
+    ticket_moyen = fields.Float(u'Ticket moyen', digits=(14,2))
 
     def init(self):
         cr , uid, context = self.env.args

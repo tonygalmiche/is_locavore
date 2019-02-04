@@ -10,18 +10,18 @@ class is_pos_order_line(models.Model):
     _order='id desc'
     _auto = False
 
-    date_order   = fields.Date('Date du ticket')
-    is_annee     = fields.Char('Année')
-    is_mois      = fields.Char('Mois')
-    order_id     = fields.Many2one('pos.order', 'Ticket')
-    session_id   = fields.Many2one('pos.session', 'Session')
-    product_id   = fields.Many2one('product.template', 'Article')
-    pos_categ_id = fields.Many2one('pos.category', 'Catégorie')
-    is_parent_pos_categ_id = fields.Many2one('pos.category', 'Catégorie mère')
-    qty          = fields.Float('Quantité')
-    price_unit   = fields.Float('Quantité')
-    montant      = fields.Float('Montant')
-    tax_id       = fields.Many2one('account.tax', 'TVA')
+    date_order   = fields.Date(u'Date du ticket')
+    is_annee     = fields.Char(u'Année')
+    is_mois      = fields.Char(u'Mois')
+    order_id     = fields.Many2one('pos.order', u'Ticket')
+    session_id   = fields.Many2one('pos.session', u'Session')
+    product_id   = fields.Many2one('product.template', u'Article')
+    pos_categ_id = fields.Many2one('pos.category', u'Catégorie')
+    is_parent_pos_categ_id = fields.Many2one('pos.category', u'Catégorie mère')
+    qty          = fields.Float(u'Quantité')
+    price_unit   = fields.Float(u'Quantité')
+    montant      = fields.Float(u'Montant')
+    tax_id       = fields.Many2one('account.tax', u'TVA')
 
 
     def init(self):

@@ -16,8 +16,8 @@ class PosCategory(models.Model):
 
 
     active = fields.Boolean('Active', default=True)
-    is_nb_articles   = fields.Char(string='Nb articles'       , compute='_compute', readonly=True, store=False)
-    is_nb_categories = fields.Char(string='Nb sous-catégories', compute='_compute', readonly=True, store=False)
+    is_nb_articles   = fields.Char(string=u'Nb articles'       , compute='_compute', readonly=True, store=False)
+    is_nb_categories = fields.Char(string=u'Nb sous-catégories', compute='_compute', readonly=True, store=False)
 
 
     @api.multi

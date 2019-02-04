@@ -12,8 +12,8 @@ class IsImprimeEtiquette(models.Model):
     _name='is.imprime.etiquette'
     _order='name desc'
 
-    name        = fields.Date("Date", required=True, default=lambda *a: _date_creation())
-    designation = fields.Char("Filtre désignation article", required=True)
+    name        = fields.Date(u"Date", required=True, default=lambda *a: _date_creation())
+    designation = fields.Char(u"Filtre désignation article", required=True)
     line_ids    = fields.One2many('is.imprime.etiquette.line', 'imprime_id', u'Lignes')
 
 
@@ -37,17 +37,17 @@ class IsImprimeEtiquetteLine(models.Model):
     _name='is.imprime.etiquette.line'
     _order='product_id'
 
-    imprime_id         = fields.Many2one('is.imprime.etiquette', 'Imprime étiquette', required=True, ondelete='cascade')
-    product_id         = fields.Many2one('product.product' , "Article", required=True)
-    designation        = fields.Char("Désignation", required=True)
-    prix_vente         = fields.Float("Prix de vente", digits=(12,2), required=True)
-    contenance         = fields.Float("Contenance", digits=(12,0))
-    contenance_uom_id  = fields.Many2one('product.uom', "Unité de contenance")
-    prix_kg            = fields.Float("Prix Kg/L", digits=(12,2))
+    imprime_id         = fields.Many2one('is.imprime.etiquette', u'Imprime étiquette', required=True, ondelete='cascade')
+    product_id         = fields.Many2one('product.product' , u"Article", required=True)
+    designation        = fields.Char(u"Désignation", required=True)
+    prix_vente         = fields.Float(u"Prix de vente", digits=(12,2), required=True)
+    contenance         = fields.Float(u"Contenance", digits=(12,0))
+    contenance_uom_id  = fields.Many2one('product.uom', u"Unité de contenance")
+    prix_kg            = fields.Float(u"Prix Kg/L", digits=(12,2))
     uom_id             = fields.Many2one('product.uom', "Kg/L")
-    largeur            = fields.Integer("Largeur désignation étiquette", default=35)
-    nb_etiquettes      = fields.Integer("Nb étiquettes", default=1)
-    imprime            = fields.Boolean("Imprime",default=True)
+    largeur            = fields.Integer(u"Largeur désignation étiquette", default=35)
+    nb_etiquettes      = fields.Integer(u"Nb étiquettes", default=1)
+    imprime            = fields.Boolean(u"Imprime",default=True)
 
 
     @api.multi

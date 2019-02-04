@@ -10,12 +10,12 @@ class IsTicketHeure(models.Model):
     _order='date_order desc, heure desc'
     _auto=False
 
-    date_order   = fields.Date('Date du ticket')
-    annee        = fields.Char('Année')
-    mois         = fields.Char('Mois')
-    heure        = fields.Char("Heure")
-    jour_semaine = fields.Char('Jour dans semaine')
-    nb_tickets   = fields.Integer('Nb tickets')
+    date_order   = fields.Date(u'Date du ticket')
+    annee        = fields.Char(u'Année')
+    mois         = fields.Char(u'Mois')
+    heure        = fields.Char(u"Heure")
+    jour_semaine = fields.Char(u'Jour dans semaine')
+    nb_tickets   = fields.Integer(u'Nb tickets')
 
     def init(self):
         cr , uid, context = self.env.args

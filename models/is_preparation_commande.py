@@ -13,13 +13,13 @@ class IsPreparationCommande(models.Model):
     _name='is.preparation.commande'
     _order='name desc'
 
-    name            = fields.Date("Date préparation"        , required=True, default=lambda *a: _date_creation())
-    date_debut      = fields.Date("Date de début des ventes", required=True)
-    date_fin        = fields.Date("Date de fin des ventes"  , required=True)
+    name            = fields.Date(u"Date préparation"        , required=True, default=lambda *a: _date_creation())
+    date_debut      = fields.Date(u"Date de début des ventes", required=True)
+    date_fin        = fields.Date(u"Date de fin des ventes"  , required=True)
     line_ids        = fields.One2many('is.preparation.commande.line'       , 'preparation_id', u'Lignes')
     fournisseur_ids = fields.One2many('is.preparation.commande.fournisseur', 'preparation_id', u'Fournisseurs')
-    designation     = fields.Char("Désignation article")
-    besoins         = fields.Boolean("Uniquement les fournisseurs ayant des besoins", default=False)
+    designation     = fields.Char(u"Désignation article")
+    besoins         = fields.Boolean(u"Uniquement les fournisseurs ayant des besoins", default=False)
 
 
     @api.multi
@@ -192,33 +192,33 @@ class IsPreparationCommandeLine(models.Model):
         for obj in self:
             obj.montant_cde=obj.prix_achat*obj.qt_suggeree
 
-    preparation_id  = fields.Many2one('is.preparation.commande', 'Préparation', required=True, ondelete='cascade')
-    product_id      = fields.Many2one('product.product' , "Article"  , readonly=True)
-    uom_po_id       = fields.Many2one('product.uom' , "Unité d'achat", readonly=True)
-    pos_categ_id    = fields.Many2one('pos.category'  , "Catégorie"  , readonly=True)
-    vente_total     = fields.Float("Ventes totales", digits=(12,2)   , readonly=True)
-    vente_jour      = fields.Float("Ventes par jour", digits=(12,2)  , readonly=True)
-    vente_frq       = fields.Float("Ventes x Frq x 1.1", digits=(12,2), readonly=True)
-    stock           = fields.Float("Stock", digits=(12,2), readonly=True)
-    qt_cde          = fields.Float("Qt en Cde", digits=(12,2), readonly=True)
-    qt_suggeree     = fields.Float("Qt suggérée", digits=(12,2))
-    nb_jours_stock  = fields.Float("Nb jours stock", digits=(12,2), readonly=True)
-    prix_achat      = fields.Float("Prix achat", digits=dp.get_precision('Product Price'))
-    montant_cde     = fields.Float("Montant Cde suggérée", digits=(12,2), readonly=True, compute='_compute', store=True)
-    montant_stock   = fields.Float("Montant stock actuel", digits=(12,0), readonly=True)
-    partner_id      = fields.Many2one('res.partner', "Fournisseur", readonly=True)
-    frq             = fields.Float("Frq", readonly=True)
+    preparation_id  = fields.Many2one('is.preparation.commande', u'Préparation', required=True, ondelete='cascade')
+    product_id      = fields.Many2one('product.product' , u"Article"  , readonly=True)
+    uom_po_id       = fields.Many2one('product.uom' , u"Unité d'achat", readonly=True)
+    pos_categ_id    = fields.Many2one('pos.category'  , u"Catégorie"  , readonly=True)
+    vente_total     = fields.Float(u"Ventes totales", digits=(12,2)   , readonly=True)
+    vente_jour      = fields.Float(u"Ventes par jour", digits=(12,2)  , readonly=True)
+    vente_frq       = fields.Float(u"Ventes x Frq x 1.1", digits=(12,2), readonly=True)
+    stock           = fields.Float(u"Stock", digits=(12,2), readonly=True)
+    qt_cde          = fields.Float(u"Qt en Cde", digits=(12,2), readonly=True)
+    qt_suggeree     = fields.Float(u"Qt suggérée", digits=(12,2))
+    nb_jours_stock  = fields.Float(u"Nb jours stock", digits=(12,2), readonly=True)
+    prix_achat      = fields.Float(u"Prix achat", digits=dp.get_precision('Product Price'))
+    montant_cde     = fields.Float(u"Montant Cde suggérée", digits=(12,2), readonly=True, compute='_compute', store=True)
+    montant_stock   = fields.Float(u"Montant stock actuel", digits=(12,0), readonly=True)
+    partner_id      = fields.Many2one('res.partner', u"Fournisseur", readonly=True)
+    frq             = fields.Float(u"Frq", readonly=True)
 
 
 class IsPreparationCommandeFournisseur(models.Model):
     _name='is.preparation.commande.fournisseur'
     _order='partner_id'
 
-    preparation_id  = fields.Many2one('is.preparation.commande', 'Préparation', required=True, ondelete='cascade')
-    partner_id      = fields.Many2one('res.partner', "Fournisseur"      , readonly=True)
-    montant_stock   = fields.Float("Montant stock"       , digits=(12,0), readonly=True)
-    montant_cde     = fields.Float("Montant Cde suggérée", digits=(12,0), readonly=True)
-    order_id        = fields.Many2one('purchase.order', "Commande"      , readonly=True)
+    preparation_id  = fields.Many2one('is.preparation.commande', u'Préparation', required=True, ondelete='cascade')
+    partner_id      = fields.Many2one('res.partner', u"Fournisseur"      , readonly=True)
+    montant_stock   = fields.Float(u"Montant stock"       , digits=(12,0), readonly=True)
+    montant_cde     = fields.Float(u"Montant Cde suggérée", digits=(12,0), readonly=True)
+    order_id        = fields.Many2one('purchase.order', u"Commande"      , readonly=True)
 
     @api.multi
     def liste_articles_action(self):

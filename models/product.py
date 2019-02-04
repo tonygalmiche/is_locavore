@@ -45,20 +45,20 @@ class ProductTemplate(models.Model):
 
 
 
-    pos_categ_id           = fields.Many2one('pos.category', string='Point of Sale Category', index=True)
-    is_prix_fournisseur    = fields.Float("Prix fournisseur HT", compute='_is_prix_fournisseur', store=False, readonly=True, digits=dp.get_precision('Product Price'))
-    is_stock_valorise      = fields.Float("Stock valorisé"     , compute='_is_prix_fournisseur', store=False, readonly=True)
-    is_prix_achat          = fields.Float("Prix d'achat HT", digits=dp.get_precision('Product Price'))
-    is_coef_multi_propose  = fields.Float("Coeficient")
-    is_taux_tva_achat      = fields.Float("Taux de TVA Achat"                , compute='_compute', store=True, readonly=True)
-    is_taux_tva_vente      = fields.Float("Taux de TVA Vente"                , compute='_compute', store=True, readonly=True)
-    is_prix_vente_propose  = fields.Float("Prix de vente TTC calculé"        , compute='_compute', store=True, readonly=True, digits=dp.get_precision('Product Price'))
-    is_coef_multi_calcule  = fields.Float("Coef. calculé"                    , compute='_compute', store=True, readonly=True)
-    is_designation         = fields.Char("Désignation étiquette")
-    is_contenance          = fields.Integer("Contenance")
-    is_contenance_uom_id   = fields.Many2one('product.uom', "Unité de contenance")
-    is_id_clyo             = fields.Char("Id Clyo")
-    is_parent_pos_categ_id = fields.Many2one('pos.category', "Catégorie mère", compute='_compute_parent_pos_categ_id', store=True, readonly=True, index=True)
+    pos_categ_id           = fields.Many2one('pos.category', string=u'Point of Sale Category', index=True)
+    is_prix_fournisseur    = fields.Float(u"Prix fournisseur HT", compute='_is_prix_fournisseur', store=False, readonly=True, digits=dp.get_precision('Product Price'))
+    is_stock_valorise      = fields.Float(u"Stock valorisé"     , compute='_is_prix_fournisseur', store=False, readonly=True)
+    is_prix_achat          = fields.Float(u"Prix d'achat HT", digits=dp.get_precision('Product Price'))
+    is_coef_multi_propose  = fields.Float(u"Coeficient")
+    is_taux_tva_achat      = fields.Float(u"Taux de TVA Achat"                , compute='_compute', store=True, readonly=True)
+    is_taux_tva_vente      = fields.Float(u"Taux de TVA Vente"                , compute='_compute', store=True, readonly=True)
+    is_prix_vente_propose  = fields.Float(u"Prix de vente TTC calculé"        , compute='_compute', store=True, readonly=True, digits=dp.get_precision('Product Price'))
+    is_coef_multi_calcule  = fields.Float(u"Coef. calculé"                    , compute='_compute', store=True, readonly=True)
+    is_designation         = fields.Char(u"Désignation étiquette")
+    is_contenance          = fields.Integer(u"Contenance")
+    is_contenance_uom_id   = fields.Many2one('product.uom', u"Unité de contenance")
+    is_id_clyo             = fields.Char(u"Id Clyo")
+    is_parent_pos_categ_id = fields.Many2one('pos.category', u"Catégorie mère", compute='_compute_parent_pos_categ_id', store=True, readonly=True, index=True)
 
 
     @api.multi
