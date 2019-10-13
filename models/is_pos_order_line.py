@@ -50,7 +50,7 @@ class is_pos_order_line(models.Model):
                     pol.order_id,
                     po.session_id,
                     pt.id product_id,
-                    substring(pt.name,0,4) fournisseur,
+                    substring(pt.name,1,4) fournisseur,
                     pt.pos_categ_id,
                     pt.is_parent_pos_categ_id,
                     pol.qty,
