@@ -16,9 +16,17 @@ class ProductTemplate(models.Model):
             obj.is_parent_pos_categ_id=obj.pos_categ_id.parent_id
 
 
-    @api.depends('is_prix_achat','is_coef_multi_propose','list_price','lst_price','taxes_id','supplier_taxes_id')
+    @api.depends('is_prix_achat','is_coef_multi_propose','list_price','lst_price','taxes_id','supplier_taxes_id','is_volume')
     def _compute(self):
         for obj in self:
+
+            print obj,obj.uom_id,obj.uom_po_id,obj.uom_id.factor_inv,obj.uom_po_id.factor_inv
+            coef=1
+            if obj.uom_id and obj.uom_po_id:
+                if obj.uom_id.factor_inv>0:
+                    coef=obj.uom_po_id.factor_inv/obj.uom_id.factor_inv
+            
+
             is_taux_tva_vente=0
             for taxe in obj.taxes_id:
                 is_taux_tva_vente=taxe.amount
@@ -26,14 +34,27 @@ class ProductTemplate(models.Model):
             for taxe in obj.supplier_taxes_id:
                 is_taux_tva_achat=taxe.amount
             is_prix_vente_propose=obj.is_prix_achat*obj.is_coef_multi_propose*(1+is_taux_tva_vente/100)
+            if coef>0:
+                is_prix_vente_propose = is_prix_vente_propose / coef
             is_coef_multi_calcule=0
             if obj.is_prix_achat!=0:
                 prix_vente_ht=obj.lst_price/(1+is_taux_tva_vente/100)
-                is_coef_multi_calcule=prix_vente_ht/obj.is_prix_achat
+                is_coef_multi_calcule=coef * prix_vente_ht/obj.is_prix_achat
+
+
             obj.is_taux_tva_achat     = is_taux_tva_achat
             obj.is_taux_tva_vente     = is_taux_tva_vente
             obj.is_prix_vente_propose = is_prix_vente_propose
             obj.is_coef_multi_calcule = is_coef_multi_calcule
+
+            marge = obj.is_prix_achat * (is_coef_multi_calcule - 1.0)
+            obj.is_marge = marge
+
+            marge_cm3 = 0
+            if obj.is_volume>0:
+                marge_cm3 = 1000 * marge / obj.is_volume
+            obj.is_marge_cm3 = marge_cm3
+
 
     def _is_prix_fournisseur(self):
         for obj in self:
@@ -54,8 +75,11 @@ class ProductTemplate(models.Model):
     is_taux_tva_vente      = fields.Float(u"Taux de TVA Vente"                , compute='_compute', store=True, readonly=True)
     is_prix_vente_propose  = fields.Float(u"Prix de vente TTC calculé"        , compute='_compute', store=True, readonly=True, digits=dp.get_precision('Product Price'))
     is_coef_multi_calcule  = fields.Float(u"Coef. calculé"                    , compute='_compute', store=True, readonly=True)
+    is_marge               = fields.Float(u"Marge", help = u"Prix d'achat HT x (Coef. calculé - 1)", compute='_compute', store=True, readonly=True, digits=dp.get_precision('Product Price'))
     is_designation         = fields.Char(u"Désignation étiquette")
     is_contenance          = fields.Integer(u"Contenance")
+    is_volume              = fields.Integer(u"Volume (cm3)")
+    is_marge_cm3           = fields.Float(u"Marge / Litre" , compute='_compute', store=True, readonly=True, digits=dp.get_precision('Product Price'), help="1000 * Marge / Volume")
     is_contenance_uom_id   = fields.Many2one('product.uom', u"Unité de contenance")
     is_id_clyo             = fields.Char(u"Id Clyo")
     is_parent_pos_categ_id = fields.Many2one('pos.category', u"Catégorie mère", compute='_compute_parent_pos_categ_id', store=True, readonly=True, index=True)

@@ -21,6 +21,7 @@ class is_pos_order_line(models.Model):
     order_id     = fields.Many2one('pos.order', u'Ticket')
     session_id   = fields.Many2one('pos.session', u'Session')
     product_id   = fields.Many2one('product.template', u'Article')
+    fournisseur  = fields.Char(u'Fournisseur')
     pos_categ_id = fields.Many2one('pos.category', u'Catégorie')
     is_parent_pos_categ_id = fields.Many2one('pos.category', u'Catégorie mère')
     qty          = fields.Float(u'Quantité')
@@ -49,6 +50,7 @@ class is_pos_order_line(models.Model):
                     pol.order_id,
                     po.session_id,
                     pt.id product_id,
+                    substring(pt.name,0,4) fournisseur,
                     pt.pos_categ_id,
                     pt.is_parent_pos_categ_id,
                     pol.qty,
