@@ -9,6 +9,7 @@
                     <field name="date_order"/>
                     <field name="annee"/>
                     <field name="mois"/>
+                    <field name="semaine"/>
                     <field name="heure"/>
                     <field name="jour_semaine"/>
                     <field name="nb_tickets"/>
@@ -26,6 +27,7 @@
                                 <field name="date_order"/>
                                 <field name="annee"/>
                                 <field name="mois"/>
+                                <field name="semaine"/>
                                 <field name="heure"/>
                                 <field name="jour_semaine"/>
                                 <field name="nb_tickets"/>
@@ -43,6 +45,7 @@
                     <field name="date_order"/>
                     <field name="annee"/>
                     <field name="mois"/>
+                    <field name="semaine"/>
                     <field name="heure"/>
                     <field name="jour_semaine"/>
                 </search>

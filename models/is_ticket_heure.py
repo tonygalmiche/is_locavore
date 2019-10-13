@@ -13,6 +13,7 @@ class IsTicketHeure(models.Model):
     date_order   = fields.Date(u'Date du ticket')
     annee        = fields.Char(u'Année')
     mois         = fields.Char(u'Mois')
+    semaine      = fields.Char(u'Semaine')
     heure        = fields.Char(u"Heure")
     jour_semaine = fields.Char(u'Jour dans semaine')
     nb_tickets   = fields.Integer(u'Nb tickets')
@@ -27,6 +28,7 @@ class IsTicketHeure(models.Model):
                     to_char(po.date_order,'YYYY-MM-DD') date_order,
                     to_char(po.date_order,'YYYY') annee,
                     to_char(po.date_order,'MM') mois,
+                    to_char(po.date_order,'WW') semaine,
                     to_char(po.date_order,'HH24') heure,
                     to_char(po.date_order,'ID') jour_semaine,
                     count(*) nb_tickets
@@ -36,6 +38,7 @@ class IsTicketHeure(models.Model):
                     to_char(po.date_order,'YYYY-MM-DD'),
                     to_char(po.date_order,'YYYY'),
                     to_char(po.date_order,'MM'),
+                    to_char(po.date_order,'WW'),
                     to_char(po.date_order,'HH24'),
                     to_char(po.date_order,'ID')
                 order by to_char(po.date_order,'YYYY-MM-DD'),to_char(po.date_order,'HH24')

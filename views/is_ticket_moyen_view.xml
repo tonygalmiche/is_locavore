@@ -102,6 +102,10 @@
                 <tree>
                     <field name="annee"/>
                     <field name="mois"/>
+                    <field name="jour_an"/>
+                    <field name="jour_mois"/>
+                    <field name="jour_semaine"/>
+                    <field name="semaine"/>
                     <field name="total_ttc"/>
                     <field name="nb_tickets"/>
                     <field name="ticket_moyen"/>
@@ -118,6 +122,10 @@
                             <group>
                                 <field name="annee"/>
                                 <field name="mois"/>
+                                <field name="jour_an"/>
+                                <field name="jour_mois"/>
+                                <field name="jour_semaine"/>
+                                <field name="semaine"/>
                                 <field name="total_ttc"/>
                                 <field name="nb_tickets"/>
                                 <field name="ticket_moyen"/>
@@ -134,6 +142,10 @@
                 <search>
                     <field name="annee"/>
                     <field name="mois"/>
+                    <field name="jour_an"/>
+                    <field name="jour_mois"/>
+                    <field name="jour_semaine"/>
+                    <field name="semaine"/>
                 </search>
             </field>
         </record>

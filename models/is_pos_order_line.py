@@ -13,6 +13,11 @@ class is_pos_order_line(models.Model):
     date_order   = fields.Date(u'Date du ticket')
     is_annee     = fields.Char(u'Année')
     is_mois      = fields.Char(u'Mois')
+    jour_an      = fields.Char(u"Jour dans l'année")
+    jour_mois    = fields.Char(u'Jour du mois')
+    jour_semaine = fields.Char(u'Jour dans semaine')
+    semaine      = fields.Char(u'Semaine')
+    heure        = fields.Char(u"Heure")
     order_id     = fields.Many2one('pos.order', u'Ticket')
     session_id   = fields.Many2one('pos.session', u'Session')
     product_id   = fields.Many2one('product.template', u'Article')
@@ -24,6 +29,8 @@ class is_pos_order_line(models.Model):
     tax_id       = fields.Many2one('account.tax', u'TVA')
 
 
+#SELECT ((stored_timestamp AT TIME ZONE 'UTC') AT TIME ZONE 'EST') AS local_timestamp
+
     def init(self):
         cr , uid, context = self.env.args
         tools.drop_view_if_exists(cr, 'is_pos_order_line')
@@ -34,6 +41,11 @@ class is_pos_order_line(models.Model):
                     po.date_order::date date_order,
                     po.is_annee,
                     po.is_mois,
+                    to_char(po.date_order,'DDD') jour_an,
+                    to_char(po.date_order,'DD') jour_mois,
+                    to_char(po.date_order,'ID') jour_semaine,
+                    to_char(po.date_order,'IW') semaine,
+                    to_char((po.date_order AT TIME ZONE 'CET'),'HH24') heure,
                     pol.order_id,
                     po.session_id,
                     pt.id product_id,

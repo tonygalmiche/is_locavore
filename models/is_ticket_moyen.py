@@ -7,7 +7,7 @@ from openerp.tools.translate import _
 
 class IsTicketMoyen(models.Model):
     _name='is.ticket.moyen'
-    _order='date desc'
+    _order='date_order desc'
     _auto=False
 
     date_order   = fields.Date(u'Date du ticket')
@@ -62,6 +62,10 @@ class IsTicketMoyenMois(models.Model):
 
     annee        = fields.Char(u'Année')
     mois         = fields.Char(u'Mois')
+    jour_an      = fields.Char(u"Jour dans l'année")
+    jour_mois    = fields.Char(u'Jour du mois')
+    jour_semaine = fields.Char(u'Jour dans semaine')
+    semaine      = fields.Char(u'Semaine')
     total_ttc    = fields.Float(u'Total TTC'   , digits=(14,2))
     nb_tickets   = fields.Integer(u'Nb tickets')
     ticket_moyen = fields.Float(u'Ticket moyen', digits=(14,2))
@@ -75,6 +79,10 @@ class IsTicketMoyenMois(models.Model):
                     max(po.id) id,
                     to_char(po.date_order,'YYYY') annee,
                     to_char(po.date_order,'MM') mois,
+                    to_char(po.date_order,'DDD') jour_an,
+                    to_char(po.date_order,'DD') jour_mois,
+                    to_char(po.date_order,'ID') jour_semaine,
+                    to_char(po.date_order,'IW') semaine,
                     sum(po.is_total) total_ttc,
                     count(*) nb_tickets,
                     sum(po.is_total)/count(*) ticket_moyen
@@ -82,7 +90,11 @@ class IsTicketMoyenMois(models.Model):
                 where po.date_order>='2014-01-01'
                 group by 
                     to_char(po.date_order,'YYYY'),
-                    to_char(po.date_order,'MM')
+                    to_char(po.date_order,'MM'),
+                    to_char(po.date_order,'DDD'),
+                    to_char(po.date_order,'DD'),
+                    to_char(po.date_order,'ID'),
+                    to_char(po.date_order,'IW')
                 order by 
                     to_char(po.date_order,'YYYY') desc,
                     to_char(po.date_order,'MM') desc

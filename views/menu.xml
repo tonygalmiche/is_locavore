@@ -79,6 +79,13 @@
             action="is_pos_order_line_action"
         />
 
+        <menuitem 
+            id="is_pos_order_line_nb_lignes_menu"
+            sequence="45"
+            name="Nb lignes par heure"
+            parent="is_pos_order_statistique_menu"
+            action="is_pos_order_line_nb_lignes_action"
+        />
 
 
 

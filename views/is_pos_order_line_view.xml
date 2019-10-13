@@ -9,6 +9,11 @@
                     <field name="date_order" />
                     <field name="is_annee" />
                     <field name="is_mois" />
+                    <field name="jour_an"/>
+                    <field name="jour_mois"/>
+                    <field name="jour_semaine"/>
+                    <field name="semaine"/>
+                    <field name="heure"/>
                     <field name="order_id" />
                     <field name="session_id" />
                     <field name="product_id" />
@@ -32,6 +37,11 @@
                                 <field name="date_order" />
                                 <field name="is_annee" />
                                 <field name="is_mois" />
+                                <field name="jour_an"/>
+                                <field name="jour_mois"/>
+                                <field name="jour_semaine"/>
+                                <field name="semaine"/>
+                                <field name="heure"/>
                                 <field name="order_id" />
                                 <field name="session_id" />
                                 <field name="product_id" />
@@ -55,13 +65,23 @@
                     <field name="date_order" />
                     <field name="is_annee" />
                     <field name="is_mois" />
+                    <field name="jour_an"/>
+                    <field name="jour_mois"/>
+                    <field name="jour_semaine"/>
+                    <field name="semaine"/>
+                    <field name="heure"/>
                     <field name="order_id" />
                     <field name="session_id" />
                     <field name="product_id" />
                     <field name="pos_categ_id" />
                     <field name="is_parent_pos_categ_id" />
                     <field name="tax_id" />
-                    <filter string="Depuis 10 jours" name="10jours" domain="[('date_order','>=',(context_today()+datetime.timedelta(days=-10)).strftime('%Y-%m-%d'))]"/>
+                    <filter string="Depuis 7 jours"   name="7jours"   domain="[('date_order','>=',(context_today()+datetime.timedelta(days=-7)).strftime('%Y-%m-%d'))]"/>
+                    <filter string="Depuis 10 jours"  name="10jours"  domain="[('date_order','>=',(context_today()+datetime.timedelta(days=-10)).strftime('%Y-%m-%d'))]"/>
+                    <filter string="Depuis 30 jours"  name="30jours"  domain="[('date_order','>=',(context_today()+datetime.timedelta(days=-30)).strftime('%Y-%m-%d'))]"/>
+                    <filter string="Depuis 60 jours"  name="60jours"  domain="[('date_order','>=',(context_today()+datetime.timedelta(days=-60)).strftime('%Y-%m-%d'))]"/>
+                    <filter string="Depuis 90 jours"  name="90jours"  domain="[('date_order','>=',(context_today()+datetime.timedelta(days=-90)).strftime('%Y-%m-%d'))]"/>
+                    <filter string="Depuis 365 jours" name="365jours" domain="[('date_order','>=',(context_today()+datetime.timedelta(days=-365)).strftime('%Y-%m-%d'))]"/>
                     <group expand="0" string="Regrouper par...">
                         <filter string="Session"   context="{'group_by':'session_id'}"/>
                         <filter string="Commande"  context="{'group_by':'order_id'}"/>
@@ -91,8 +111,6 @@
                 </graph>
             </field>
         </record>
-
-
         <record  id="is_pos_order_line_action" model="ir.actions.act_window">
             <field name="name">Lignes des tickets</field>
             <field name="res_model">is.pos.order.line</field>
@@ -101,5 +119,27 @@
             <field name="view_mode">pivot,graph,tree,form</field>
             <field name="context">{'search_default_10jours':1}</field>
         </record>
+
+        <record id="is_pos_order_line_nb_lignes_pivot" model="ir.ui.view">
+            <field name="name">is_pos_order_line_nb_lignes_pivot</field>
+            <field name="model">is.pos.order.line</field>
+            <field name="priority" eval="90" />
+            <field name="arch" type="xml">
+                <pivot string="Nb lignes de tickets par jour et par heure">
+                    <field name="heure"        type="row"/>
+                    <field name="jour_semaine" type="col"/>
+                </pivot>
+            </field>
+        </record>
+        <record  id="is_pos_order_line_nb_lignes_action" model="ir.actions.act_window">
+            <field name="name">Nb lignes de tickets par jour et par heure (heure UTC)</field>
+            <field name="res_model">is.pos.order.line</field>
+            <field name="view_type">form</field>
+            <field name="limit">200</field>
+            <field name="view_mode">pivot,graph,tree,form</field>
+            <field name="context">{'search_default_60jours':1}</field>
+            <field name="view_id" ref="is_pos_order_line_nb_lignes_pivot"/>
+        </record>
+
     </data>
 </openerp>
