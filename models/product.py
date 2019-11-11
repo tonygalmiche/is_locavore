@@ -19,14 +19,11 @@ class ProductTemplate(models.Model):
     @api.depends('is_prix_achat','is_coef_multi_propose','list_price','lst_price','taxes_id','supplier_taxes_id','is_volume')
     def _compute(self):
         for obj in self:
-
-            print obj,obj.uom_id,obj.uom_po_id,obj.uom_id.factor_inv,obj.uom_po_id.factor_inv
             coef=1
             if obj.uom_id and obj.uom_po_id:
                 if obj.uom_id.factor_inv>0:
                     coef=obj.uom_po_id.factor_inv/obj.uom_id.factor_inv
             
-
             is_taux_tva_vente=0
             for taxe in obj.taxes_id:
                 is_taux_tva_vente=taxe.amount
@@ -41,13 +38,14 @@ class ProductTemplate(models.Model):
                 prix_vente_ht=obj.lst_price/(1+is_taux_tva_vente/100)
                 is_coef_multi_calcule=coef * prix_vente_ht/obj.is_prix_achat
 
-
             obj.is_taux_tva_achat     = is_taux_tva_achat
             obj.is_taux_tva_vente     = is_taux_tva_vente
             obj.is_prix_vente_propose = is_prix_vente_propose
             obj.is_coef_multi_calcule = is_coef_multi_calcule
 
             marge = obj.is_prix_achat * (is_coef_multi_calcule - 1.0)
+            if coef>0:
+                marge=marge/coef
             obj.is_marge = marge
 
             marge_cm3 = 0

@@ -234,19 +234,14 @@ class is_export_compta(models.Model):
                     debit=-montant
                 else:
                     credit=montant
-
-
                 date_facture=row[0]
-
                 date=date_facture
                 date=datetime.datetime.strptime(date, '%Y-%m-%d')
                 date=date.strftime('%d/%m/%Y')
-
                 libelle_piece='Caisse du '+date
                 if obj.journal=='HA':
                     libelle_piece=row[5]
-
-                if montant:
+                if round(montant,2):
                     vals={
                         'export_compta_id'  : obj.id,
                         'ligne'             : ct,
@@ -260,8 +255,6 @@ class is_export_compta(models.Model):
                         'credit'            : credit,
                         'devise'            : u'EUR',
                     }
-
-
                     self.env['is.export.compta.ligne'].create(vals)
             self.generer_fichier()
 
