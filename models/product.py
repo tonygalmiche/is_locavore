@@ -9,6 +9,11 @@ class ProductTemplate(models.Model):
     _order='name'
 
 
+    @api.multi
+    def actualiser_is_parent_pos_categ_id_action(self):
+        for obj in self:
+            obj.is_parent_pos_categ_id=obj.pos_categ_id.parent_id
+
 
     @api.depends('pos_categ_id')
     def _compute_parent_pos_categ_id(self):

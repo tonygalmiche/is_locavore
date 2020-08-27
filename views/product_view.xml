@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+
+
+    <!-- Actualiser catégorie mère -->
+    <record id="actualiser_is_parent_pos_categ_id_action_server" model="ir.actions.server">
+         <field name="name">Actualiser catégorie mère</field>
+        <field name="model_id" ref="model_product_template"/>
+        <field name="code">records.actualiser_is_parent_pos_categ_id_action()</field>
+    </record>
+    <record id="actualiser_is_parent_pos_categ_id_ir_value" model="ir.values">
+        <field eval="'client_action_multi'" name="key2"/>
+        <field eval="'product.template'" name="model"/>
+        <field name="name">Actualiser catégorie mère</field>
+        <field eval="'ir.actions.server,%d'%actualiser_is_parent_pos_categ_id_action_server" name="value"/>
+    </record>
+
+
+
+
     <record id="is_product_template_form_view" model="ir.ui.view">
         <field name="name">is_product_template_form_view</field>
         <field name="model">product.template</field>
