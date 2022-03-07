@@ -68,7 +68,6 @@ class ProductTemplate(models.Model):
             obj.is_stock_valorise=x*obj.qty_available
 
 
-
     pos_categ_id           = fields.Many2one('pos.category', string=u'Point of Sale Category', index=True)
     is_prix_fournisseur    = fields.Float(u"Prix fournisseur HT", compute='_is_prix_fournisseur', store=False, readonly=True, digits=dp.get_precision('Product Price'))
     is_stock_valorise      = fields.Float(u"Stock valorisé"     , compute='_is_prix_fournisseur', store=False, readonly=True)
@@ -86,6 +85,7 @@ class ProductTemplate(models.Model):
     is_contenance_uom_id   = fields.Many2one('product.uom', u"Unité de contenance")
     is_id_clyo             = fields.Char(u"Id Clyo")
     is_parent_pos_categ_id = fields.Many2one('pos.category', u"Catégorie mère", compute='_compute_parent_pos_categ_id', store=True, readonly=True, index=True)
+    is_dlc                 = fields.Date(u"DLC")
 
 
     @api.multi

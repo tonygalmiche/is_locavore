@@ -41,6 +41,9 @@
                 <field name="is_volume"/>
                 <field name="is_marge_cm3"/>
             </field>
+            <field name="uom_id" position="before">
+                <field name="is_dlc"/>
+            </field>
         </field>
     </record>
 
@@ -78,6 +81,7 @@
                 <field name="is_contenance_uom_id"/>
                 <field name="is_volume"/>
                 <field name="is_marge_cm3"/>
+                <field name="is_dlc"/>
             </tree>
         </field>
     </record>
