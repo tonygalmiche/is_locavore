@@ -15,4 +15,5 @@ import is_product_template
 import is_ticket_moyen
 import is_ticket_heure
 import is_analyse_taux_marge
+import account_invoice
 

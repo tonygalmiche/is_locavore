@@ -20,6 +20,7 @@
                     <field name="ligne"/>
                     <field name="date_facture"/>
                     <field name="account_id"/>
+                    <field name="invoice_id"/>
                     <field name="libelle"/>
                     <field name="piece"/>
                     <field name="libelle_piece"/>
@@ -39,6 +40,7 @@
                                 <field name="export_compta_id"/>
                                 <field name="date_facture"/>
                                 <field name="account_id"/>
+                                <field name="invoice_id"/>
                                 <field name="libelle"/>
                                 <field name="piece"/>
                                 <field name="libelle_piece"/>
@@ -140,12 +142,12 @@
                             <field 
                                 name="facture_debut_id" 
                                 attrs="{'invisible': [('journal', '!=', 'HA')]}" 
-                                domain="[('state', 'not in', ['draft','cancel','paid']),('journal_id', '=', 2)]" 
+                                domain="[('state', 'not in', ['draft','cancel']),('journal_id', '=', 2)]" 
                             />
                             <field 
                                 name="facture_fin_id" 
                                 attrs="{'invisible': [('journal', '!=', 'HA')]}" 
-                                domain="[('state', 'not in', ['draft','cancel','paid']),('journal_id', '=', 2)]" 
+                                domain="[('state', 'not in', ['draft','cancel']),('journal_id', '=', 2)]" 
                             />
                             <field 
                                 name="file_ids" 
@@ -171,7 +173,7 @@
 
         <!-- Export comptable -->
         <record id="is_export_compta_action" model="ir.actions.act_window">
-            <field name="name">Export Ciel</field>
+            <field name="name">Export Pennylane</field>
             <field name="res_model">is.export.compta</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
