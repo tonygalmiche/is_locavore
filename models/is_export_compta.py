@@ -289,74 +289,140 @@ class is_export_compta(models.Model):
             self.generer_fichier()
 
 
+
+
     def generer_fichier(self):
         cr=self._cr
         for obj in self:
-            sql="""
-                SELECT to_char(date_facture,'YYYY-MM')
-                FROM is_export_compta_ligne
-                WHERE export_compta_id="""+str(obj.id)+"""
-                GROUP BY to_char(date_facture,'YYYY-MM')
-                ORDER BY to_char(date_facture,'YYYY-MM')
-            """
-            cr.execute(sql)
-            for row_mois in cr.fetchall():
-                mois=row_mois[0]
-                name='export-compta-'+mois+'.csv'
-                model='is.export.compta'
-                attachments = self.env['ir.attachment'].search([('res_model','=',model),('res_id','=',obj.id),('name','=',name)])
-                attachments.unlink()
+            name='export-compta-'+obj.name+'.csv'
+            model='is.export.compta'
+            attachments = self.env['ir.attachment'].search([('res_model','=',model),('res_id','=',obj.id),('name','=',name)])
+            attachments.unlink()
 
-                f = cStringIO.StringIO()
-                writer = csv.writer(f, delimiter=';')
+            f = cStringIO.StringIO()
+            writer = csv.writer(f, delimiter=';')
 
-                headers = [
-                    'Date',
-                    'Code Journal',
-                    'Numéro de compte',
-                    'Libellé de compte',
-                    'Libellé de ligne',
-                    'Taux de TVA du compte',
-                    'Code pays du compte',
-                    'Libellé de pièce',
-                    'Numéro de pièce',
-                    'Débit',
-                    'Crédit'
+            headers = [
+                'Date',
+                'Code Journal',
+                'Numéro de compte',
+                'Libellé de compte',
+                'Libellé de ligne',
+                'Taux de TVA du compte',
+                'Code pays du compte',
+                'Libellé de pièce',
+                'Numéro de pièce',
+                'Débit',
+                'Crédit'
+            ]
+            writer.writerow(headers)
+
+            for row in obj.ligne_ids:
+                debit_str = str(row.debit).replace('.', ',') if row.debit else '0'
+                credit_str = str(row.credit).replace('.', ',') if row.credit else '0'
+
+                line = [
+                    row.date_facture,
+                    obj.journal,
+                    row.account_id.code or '',
+                    (row.libelle or '').encode('utf-8'),
+                    '',
+                    '',
+                    '',
+                    (row.libelle_piece or '').encode('utf-8'),
+                    (row.piece or '').encode('utf-8'),
+                    debit_str,
+                    credit_str
                 ]
-                writer.writerow(headers)
+                writer.writerow(line)
 
-                for row in obj.ligne_ids:
-                    if row.date_facture[0:7]==mois:
-                        debit_str = str(row.debit).replace('.', ',') if row.debit else '0'
-                        credit_str = str(row.credit).replace('.', ',') if row.credit else '0'
+            val = f.getvalue()
+            f.close()
 
-                        line = [
-                            row.date_facture,
-                            obj.journal,
-                            row.account_id.code or '',
-                            (row.libelle or '').encode('utf-8'),
-                            '',
-                            '',
-                            '',
-                            (row.libelle_piece or '').encode('utf-8'),
-                            (row.piece or '').encode('utf-8'),
-                            debit_str,
-                            credit_str
-                        ]
-                        writer.writerow(line)
+            vals = {
+                'name':        name,
+                'datas_fname': name,
+                'type':        'binary',
+                'res_model':   model,
+                'res_id':      obj.id,
+                'datas':       base64.b64encode(val),
+            }
+            self.env['ir.attachment'].create(vals)
 
-                val = f.getvalue()
-                f.close()
 
-                vals = {
-                    'name':        name,
-                    'datas_fname': name,
-                    'type':        'binary',
-                    'res_model':   model,
-                    'res_id':      obj.id,
-                    'datas':       base64.b64encode(val),
-                }
-                self.env['ir.attachment'].create(vals)
+
+
+
+
+
+    # def generer_fichier(self):
+    #     cr=self._cr
+    #     for obj in self:
+    #         sql="""
+    #             SELECT to_char(date_facture,'YYYY-MM')
+    #             FROM is_export_compta_ligne
+    #             WHERE export_compta_id="""+str(obj.id)+"""
+    #             GROUP BY to_char(date_facture,'YYYY-MM')
+    #             ORDER BY to_char(date_facture,'YYYY-MM')
+    #         """
+    #         cr.execute(sql)
+    #         for row_mois in cr.fetchall():
+    #             mois=row_mois[0]
+    #             name='export-compta-'+mois+'.csv'
+    #             model='is.export.compta'
+    #             attachments = self.env['ir.attachment'].search([('res_model','=',model),('res_id','=',obj.id),('name','=',name)])
+    #             attachments.unlink()
+
+    #             f = cStringIO.StringIO()
+    #             writer = csv.writer(f, delimiter=';')
+
+    #             headers = [
+    #                 'Date',
+    #                 'Code Journal',
+    #                 'Numéro de compte',
+    #                 'Libellé de compte',
+    #                 'Libellé de ligne',
+    #                 'Taux de TVA du compte',
+    #                 'Code pays du compte',
+    #                 'Libellé de pièce',
+    #                 'Numéro de pièce',
+    #                 'Débit',
+    #                 'Crédit'
+    #             ]
+    #             writer.writerow(headers)
+
+    #             for row in obj.ligne_ids:
+    #                 if row.date_facture[0:7]==mois:
+    #                     debit_str = str(row.debit).replace('.', ',') if row.debit else '0'
+    #                     credit_str = str(row.credit).replace('.', ',') if row.credit else '0'
+
+    #                     line = [
+    #                         row.date_facture,
+    #                         obj.journal,
+    #                         row.account_id.code or '',
+    #                         (row.libelle or '').encode('utf-8'),
+    #                         '',
+    #                         '',
+    #                         '',
+    #                         (row.libelle_piece or '').encode('utf-8'),
+    #                         (row.piece or '').encode('utf-8'),
+    #                         debit_str,
+    #                         credit_str
+    #                     ]
+    #                     writer.writerow(line)
+
+    #             val = f.getvalue()
+    #             f.close()
+
+    #             vals = {
+    #                 'name':        name,
+    #                 'datas_fname': name,
+    #                 'type':        'binary',
+    #                 'res_model':   model,
+    #                 'res_id':      obj.id,
+    #                 'datas':       base64.b64encode(val),
+    #             }
+    #             self.env['ir.attachment'].create(vals)
 
 
 
