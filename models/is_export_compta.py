@@ -259,12 +259,23 @@ class is_export_compta(models.Model):
                 libelle_piece='Caisse du '+date
                 if obj.journal=='HA':
                     libelle_piece=row[5]
+
+                # Récupérer l'account_id
+                account_id = row[6]
+                
+                # Vérifier si c'est le compte 708600 et le remplacer par 409600
+                account = self.env['account.account'].browse(account_id)
+                if account.code == '708600':
+                    new_account = self.env['account.account'].search([('code', '=', '409600')], limit=1)
+                    if new_account:
+                        account_id = new_account.id
+                    
                 if round(montant,2):
                     vals={
                         'export_compta_id'  : obj.id,
                         'ligne'             : ct,
                         'date_facture'      : date_facture,
-                        'account_id'        : row[6],
+                        'account_id'        : account_id,
                         'invoice_id'        : invoice_id,
                         'libelle'           : s(row[2][0:29]),
                         'piece'             : row[4],
